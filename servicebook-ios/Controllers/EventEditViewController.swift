@@ -13,6 +13,7 @@ import UIKit
 class EventEditViewController: UIViewController {
     
 
+    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var organization: UITextField!
     @IBOutlet weak var startTime: UITextField!
@@ -21,35 +22,85 @@ class EventEditViewController: UIViewController {
     @IBOutlet weak var city: UITextField!
     @IBOutlet weak var state: UITextField!
     @IBOutlet weak var country: UITextField!
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    
+    
+    var event: Event!
+    var edit = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        //editing
+        if(event != nil) {
+            
+            //setup UI
+            navigationBar.topItem?.title = "Edit Event"
+            saveButton.title = "Save"
+            deleteButton.hidden = false
+            edit = true
+
+            //setup data
+            name.text = event.name
+            streetAddress.text = event.address
+            city.text = event.city
+            state.text = event.state
+            country.text = event.country
+            
+        } else {
+            deleteButton.hidden = true
+        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func cancel(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
-    @IBAction func create(sender: AnyObject) {
+    @IBAction func saveEvent(sender: AnyObject) {
         
-        let event: Event = Event()
+        //build event
         event.name = name.text
         event.address = streetAddress.text
         event.city = city.text
         event.state = state.text
         event.country = country.text
         
+        //store data
         let pm: PersistenceManager = PersistenceManager.sharedInstance
         pm.save(event)
+        
+        //update tableview
+        let vc = self.presentingViewController as!  UITabBarController
+        let activityVC  = vc.selectedViewController as! ActivityViewController
+        if edit {
+            activityVC.updateEvent(event)
+
+        } else {
+            activityVC.addEvent(event)
+        }
         
         self.dismissViewControllerAnimated(true, completion: {})
         
     }
+
+    @IBAction func deleteEvent(sender: AnyObject) {
+        
+        //delete event
+        let pm: PersistenceManager = PersistenceManager.sharedInstance
+        pm.delete(event)
+        
+        //update tableview
+        let vc = self.presentingViewController as!  UITabBarController
+        let activityVC  = vc.selectedViewController as! ActivityViewController
+        activityVC.deleteSelectedEvent()
+        
+        self.dismissViewControllerAnimated(true, completion: {})
+    }
+
 }

@@ -14,6 +14,8 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     
     var events = [Resource]()
+    
+    var selectedRow:NSIndexPath!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,18 +40,14 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        print("oy")
         return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("hey")
         return events.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        print("here")
         
         let cellIdentifier = "EventTableViewCell"
     
@@ -62,5 +60,30 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
+    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+        
+        selectedRow = indexPath
+        
+        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as! EventEditViewController
+        
+        let event = events[indexPath.row] as! Event
+        vc.event = event
+        
+        presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    func addEvent(event:Event) {
+        events.append(event)
+        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: events.count-1, inSection: 0)], withRowAnimation: .Automatic)
+    }
+    
+    func updateEvent(event:Event) {
+        tableView.reloadRowsAtIndexPaths([selectedRow], withRowAnimation: .Automatic)
+    }
+    
+    func deleteSelectedEvent() {
+        events.removeAtIndex(selectedRow.row)
+        tableView.deleteRowsAtIndexPaths([selectedRow], withRowAnimation: .Automatic)
+    }
     
 }

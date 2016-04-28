@@ -59,4 +59,12 @@ class PersistenceManager {
                 print("Fetching failed: \(error)")
             }
     }
+    
+    func delete(resource: Resource) {
+        spine.delete(resource).onSuccess {
+                print("Deleting success")
+            }.onFailure { error in
+                print("Deleting failed: \(error)")
+            }
+    }
 }

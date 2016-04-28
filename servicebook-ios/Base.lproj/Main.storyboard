@@ -30,7 +30,7 @@
         <!--Event Edit View Controller-->
         <scene sceneID="Vry-Bb-3Lo">
             <objects>
-                <viewController id="bml-0w-dnT" customClass="EventEditViewController" customModule="servicebook_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventEditViewController" id="bml-0w-dnT" customClass="EventEditViewController" customModule="servicebook_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xCh-4C-VH4"/>
                         <viewControllerLayoutGuide type="bottom" id="fnn-vk-pT9"/>
@@ -51,7 +51,7 @@
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Create" id="zoZ-NZ-9Ph">
                                             <connections>
-                                                <action selector="create:" destination="bml-0w-dnT" id="XQX-ba-Ieq"/>
+                                                <action selector="saveEvent:" destination="bml-0w-dnT" id="auD-Cg-acK"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -136,6 +136,17 @@
                                             <rect key="frame" x="203" y="82" width="188" height="30"/>
                                         </variation>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZIJ-D1-8kR">
+                                        <rect key="frame" x="8" y="350" width="584" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Delete"/>
+                                        <variation key="widthClass=compact" fixedFrame="YES">
+                                            <rect key="frame" x="8" y="350" width="385" height="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="deleteEvent:" destination="bml-0w-dnT" eventType="touchUpInside" id="eiS-a0-rFi"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
@@ -153,9 +164,12 @@
                     <connections>
                         <outlet property="city" destination="J6e-5U-GU2" id="eoQ-a3-Gnw"/>
                         <outlet property="country" destination="hA7-yC-8YM" id="oaN-FY-c0y"/>
+                        <outlet property="deleteButton" destination="ZIJ-D1-8kR" id="f5q-1L-LTv"/>
                         <outlet property="endTime" destination="n9H-hA-u0Z" id="Ruw-BX-bpO"/>
                         <outlet property="name" destination="97m-E7-FDo" id="i79-ae-WPW"/>
+                        <outlet property="navigationBar" destination="kmt-Fm-FX6" id="KVP-Qo-6VV"/>
                         <outlet property="organization" destination="dMz-O3-lpU" id="hDc-fU-uXw"/>
+                        <outlet property="saveButton" destination="zoZ-NZ-9Ph" id="9bL-GY-jYO"/>
                         <outlet property="startTime" destination="hWA-oP-a56" id="FRi-c0-B1H"/>
                         <outlet property="state" destination="AlV-O1-mnD" id="DlE-e3-pN5"/>
                         <outlet property="streetAddress" destination="kpQ-fQ-rWX" id="NNU-kB-sAO"/>
@@ -163,7 +177,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wfd-xT-oPL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1451" y="-731"/>
+            <point key="canvasLocation" x="1450.5" y="-731"/>
         </scene>
         <!--Me-->
         <scene sceneID="toc-xP-RBb">
