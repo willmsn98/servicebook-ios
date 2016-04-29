@@ -33,6 +33,8 @@ class EventEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        name.borderStyle = UITextBorderStyle.RoundedRect;
+        
         //editing
         if(event != nil) {
             
@@ -50,6 +52,7 @@ class EventEditViewController: UIViewController {
             country.text = event.country
             
         } else {
+            event = Event()
             deleteButton.hidden = true
         }
     }

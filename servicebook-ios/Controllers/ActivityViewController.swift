@@ -55,7 +55,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         
         let event = events[indexPath.row] as! Event
         cell.name.text = event.name
-        cell.location.text = "\(event.city), \(event.state)"
+        cell.location.text = "\(event.city!), \(event.state!)"
         
         return cell
     }
