@@ -67,6 +67,8 @@ class EventEditViewController: UIViewController {
     
     @IBAction func saveEvent(sender: AnyObject) {
         
+        let pm: PersistenceManager = PersistenceManager.sharedInstance
+
         //build event
         event.name = name.text
         event.address = streetAddress.text
@@ -74,8 +76,11 @@ class EventEditViewController: UIViewController {
         event.state = state.text
         event.country = country.text
         
+        if !edit {
+            event.owner = pm.user
+        }
+        
         //store data
-        let pm: PersistenceManager = PersistenceManager.sharedInstance
         pm.save(event)
         
         //update tableview

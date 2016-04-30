@@ -19,7 +19,7 @@ class Event: Resource {
     var country: String?
     //var startTime: String?
     //var endTime: String?
-    //var owner: User?
+    var owner: User?
     //var organization: Organization?
     //var comments: LinkedResourceCollection?
     //var photos: LinkedResourceCollection?
@@ -37,7 +37,7 @@ class Event: Resource {
             "country": Attribute(),
             //"startTime": Attribute(),
             //"endTime": Attribute(),
-            //"owner": ToOneRelationship(User),
+            "owner": ToOneRelationship(User)
             //"organization": ToOneRelationship(Organization),
             //"comments": ToManyRelationship(Comment)
             //"photos": ToManyRelationship(Photo)

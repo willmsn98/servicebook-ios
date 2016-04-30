@@ -16,32 +16,24 @@ class PersistenceManager {
     
     var spine: Spine!
     var url: NSURL!
+    var user: User!
     
     init() {
-        Spine.setLogLevel(.Debug, forDomain: .Spine)
-        Spine.setLogLevel(.Debug, forDomain: .Networking)
-        Spine.setLogLevel(.Debug, forDomain: .Serializing)
+        Spine.setLogLevel(.Warning, forDomain: .Spine)
+        Spine.setLogLevel(.Warning, forDomain: .Networking)
+        Spine.setLogLevel(.Warning, forDomain: .Serializing)
         
         url = NSURL(string: "https://servicebook-api.herokuapp.com/")
         
         spine = Spine(baseURL: url)
-        registerResources()        
+        registerResources()
+        
+        setUser("christopher.e.williamson@gmail.com")
     }
     
     func registerResources() {
         spine.registerResource(Event)
-    }
-    
-    func initTestData() {
-        let event: Event = Event()
-        event.name = "iOS Test"
-        event.address = "100 My Street"
-        event.city = "City"
-        event.state = "AA"
-        event.country = "USA"
-        //event.startTime = "1:00PM"
-        //event.endTime = "3:00PM"
-        save(event)
+        spine.registerResource(User)
     }
     
     func save(resource: Resource) {
@@ -66,5 +58,21 @@ class PersistenceManager {
             }.onFailure { error in
                 print("Deleting failed: \(error)")
             }
+    }
+    
+    func setUser(email: String) {
+        
+        var query = Query(resourceType: User.self)
+        query.whereAttribute("user.email", equalTo: email)
+        
+        spine.find(query).onSuccess { resources, meta, jsonapi in
+            if resources.count > 0 {
+                self.user = resources.resources[0] as! User
+            } else {
+                print("No user found: \(email)")
+            }
+        }.onFailure { error in
+            print("Fetching failed: \(error)")
+        }
     }
 }
