@@ -9,13 +9,14 @@
 import Foundation
 
 import Spine
+import BrightFutures
 
 class PersistenceManager {
     
     static let sharedInstance = PersistenceManager()
     
     var spine: Spine!
-    var url: NSURL!
+    var baseUrl: NSURL!
     var user: User!
     
     init() {
@@ -23,9 +24,8 @@ class PersistenceManager {
         Spine.setLogLevel(.Warning, forDomain: .Networking)
         Spine.setLogLevel(.Warning, forDomain: .Serializing)
         
-        url = NSURL(string: "https://servicebook-api.herokuapp.com/")
-        
-        spine = Spine(baseURL: url)
+        baseUrl = NSURL(string: "https://servicebook-api.herokuapp.com/")
+        spine = Spine(baseURL: baseUrl)
         registerResources()
         
         setUser("christopher.e.williamson@gmail.com")
@@ -36,28 +36,38 @@ class PersistenceManager {
         spine.registerResource(User)
     }
     
-    func save(resource: Resource) {
-        spine.save(resource).onSuccess { _ in
-            print("Saving success")
+    func save(resource: Resource) -> Future<Resource, SpineError> {
+        let promise = Promise<Resource, SpineError>()
+        spine.save(resource).onSuccess { resource in
+            promise.success(resource)
         }.onFailure { error in
+            promise.failure(error)
             print("Saving failed: \(error)")
         }
+        return promise.future
     }
     
-    func getEvents(setEvents: (ResourceCollection) -> Void) {
+    func getEvents() -> Future<ResourceCollection, SpineError> {
+        let promise = Promise<ResourceCollection, SpineError>()
         spine.findAll(Event).onSuccess { resources, meta, jsonapi in
-                setEvents(resources)
+                promise.success(resources)
             }.onFailure { error in
+                promise.failure(error)
                 print("Fetching failed: \(error)")
             }
+        return promise.future
     }
     
-    func delete(resource: Resource) {
+    func delete(resource: Resource) -> Future<Void, SpineError> {
+        let promise = Promise<Void, SpineError>()
         spine.delete(resource).onSuccess {
+                promise.success()
                 print("Deleting success")
             }.onFailure { error in
+                promise.failure(error)
                 print("Deleting failed: \(error)")
             }
+        return promise.future
     }
     
     func setUser(email: String) {

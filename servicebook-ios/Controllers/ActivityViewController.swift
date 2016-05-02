@@ -8,6 +8,8 @@
 
 import UIKit
 import Spine
+import BrightFutures
+import Result
 
 class ActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -30,12 +32,16 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     
     func loadEvents() {
         let pm = PersistenceManager.sharedInstance
-        pm.getEvents { (resources) in
+        pm.getEvents().onSuccess { resources in
             self.events = resources.resources
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.tableView.reloadData()
             })
+            
+        }.onFailure { error in
+            print(error)
+                    
         }
     }
     
