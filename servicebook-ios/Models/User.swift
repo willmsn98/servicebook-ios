@@ -31,6 +31,7 @@ class User: Resource {
             "city": Attribute(),
             "state": Attribute(),
             "country": Attribute(),
+            "email": Attribute(),
             "user.email": Attribute(),
             "phone": Attribute()
             ])
