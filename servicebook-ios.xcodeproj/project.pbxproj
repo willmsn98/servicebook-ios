@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		422B91671CCF941100329BF6 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B91661CCF941100329BF6 /* PersistenceManager.swift */; };
 		424B54771CD05D5900F98790 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B54761CD05D5900F98790 /* EventTableViewCell.swift */; };
+		42D3C4A91D30C63200CBF083 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D3C4A81D30C63200CBF083 /* EventViewController.swift */; };
 		42F086D91CCF2BD2002DD573 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F086D81CCF2BD2002DD573 /* Event.swift */; };
 		42F086E01CCF30F4002DD573 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F086DF1CCF30F4002DD573 /* EventEditViewController.swift */; };
 		42F1CA011CD465A8006CBD4E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F1CA001CD465A8006CBD4E /* User.swift */; };
@@ -43,6 +44,7 @@
 /* Begin PBXFileReference section */
 		422B91661CCF941100329BF6 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		424B54761CD05D5900F98790 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = Views/EventTableViewCell.swift; sourceTree = "<group>"; };
+		42D3C4A81D30C63200CBF083 /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewController.swift; path = Controllers/EventViewController.swift; sourceTree = "<group>"; };
 		42F086D81CCF2BD2002DD573 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Event.swift; path = Models/Event.swift; sourceTree = "<group>"; };
 		42F086DF1CCF30F4002DD573 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditViewController.swift; path = Controllers/EventEditViewController.swift; sourceTree = "<group>"; };
 		42F1CA001CD465A8006CBD4E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Models/User.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				42FC1B211CC9E4950030F5BD /* ActivityViewController.swift */,
 				42F086DF1CCF30F4002DD573 /* EventEditViewController.swift */,
+				42D3C4A81D30C63200CBF083 /* EventViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				42FC1ADC1CC9CE090030F5BD /* AppDelegate.swift in Sources */,
 				42F1CA011CD465A8006CBD4E /* User.swift in Sources */,
 				42F086E01CCF30F4002DD573 /* EventEditViewController.swift in Sources */,
+				42D3C4A91D30C63200CBF083 /* EventViewController.swift in Sources */,
 				42F086D91CCF2BD2002DD573 /* Event.swift in Sources */,
 				42FC1B221CC9E4950030F5BD /* ActivityViewController.swift in Sources */,
 			);

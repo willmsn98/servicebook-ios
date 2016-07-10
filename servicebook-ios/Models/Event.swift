@@ -12,6 +12,7 @@ import Spine
 // Resource class
 class Event: Resource {
     var name: String?
+    var details: String?
     var address: String?
     var city: String?
     var state: String?
@@ -30,6 +31,7 @@ class Event: Resource {
     override class var fields: [Field] {
         return fieldsFromDictionary([
             "name": Attribute(),
+            "details": Attribute(),
             "address": Attribute(),
             "city": Attribute(),
             "state": Attribute(),

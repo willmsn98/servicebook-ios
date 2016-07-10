@@ -70,10 +70,11 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         
         selectedRow = indexPath
         
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as! EventEditViewController
+        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as! EventViewController
         
         let event = events[indexPath.row] as! Event
         vc.event = event
+        vc.activityVC = self
         
         presentViewController(vc, animated: true, completion: nil)
     }

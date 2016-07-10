@@ -15,6 +15,7 @@ class EventEditViewController: UIViewController {
 
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var name: UITextField!
+    @IBOutlet weak var details: UITextView!
     @IBOutlet weak var organization: UITextField!
     @IBOutlet weak var startTime: UITextField!
     @IBOutlet weak var endTime: UITextField!
@@ -25,7 +26,8 @@ class EventEditViewController: UIViewController {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    
+    var activityVC: ActivityViewController!
+    var eventVC: EventViewController!
     var event: Event!
     var edit = false
     
@@ -46,6 +48,7 @@ class EventEditViewController: UIViewController {
 
             //setup data
             name.text = event.name
+            details.text = event.details
             streetAddress.text = event.address
             city.text = event.city
             state.text = event.state
@@ -55,6 +58,7 @@ class EventEditViewController: UIViewController {
             event = Event()
             deleteButton.hidden = true
         }
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,6 +75,7 @@ class EventEditViewController: UIViewController {
 
         //build event
         event.name = name.text
+        event.details = details.text
         event.address = streetAddress.text
         event.city = city.text
         event.state = state.text
@@ -83,12 +88,15 @@ class EventEditViewController: UIViewController {
         //store data
         pm.save(event)
         
+        if(activityVC == nil) {
+            let vc = self.presentingViewController as!  UITabBarController
+            activityVC  = vc.selectedViewController as! ActivityViewController
+        }
+        
         //update tableview
-        let vc = self.presentingViewController as!  UITabBarController
-        let activityVC  = vc.selectedViewController as! ActivityViewController
         if edit {
             activityVC.updateEvent(event)
-
+            eventVC.event = event
         } else {
             activityVC.addEvent(event)
         }
