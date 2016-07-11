@@ -9,6 +9,7 @@
 import Foundation
 
 import UIKit
+import CoreLocation
 
 class EventEditViewController: UIViewController {
     
@@ -19,10 +20,7 @@ class EventEditViewController: UIViewController {
     @IBOutlet weak var organization: UITextField!
     @IBOutlet weak var startTime: UITextField!
     @IBOutlet weak var endTime: UITextField!
-    @IBOutlet weak var streetAddress: UITextField!
-    @IBOutlet weak var city: UITextField!
-    @IBOutlet weak var state: UITextField!
-    @IBOutlet weak var country: UITextField!
+    @IBOutlet weak var address: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -49,11 +47,7 @@ class EventEditViewController: UIViewController {
             //setup data
             name.text = event.name
             details.text = event.details
-            streetAddress.text = event.address
-            city.text = event.city
-            state.text = event.state
-            country.text = event.country
-            
+            address.text = event.address
         } else {
             event = Event()
             deleteButton.hidden = true
@@ -73,36 +67,44 @@ class EventEditViewController: UIViewController {
         
         let pm: PersistenceManager = PersistenceManager.sharedInstance
 
-        //build event
-        event.name = name.text
-        event.details = details.text
-        event.address = streetAddress.text
-        event.city = city.text
-        event.state = state.text
-        event.country = country.text
-        
-        if !edit {
-            event.owner = pm.user
+        let coder = CLGeocoder()
+        coder.geocodeAddressString(address.text!) { (placemarks, error) -> Void in
+            
+            if let firstPlacemark = placemarks?[0] {
+                //set location
+                self.event.country = firstPlacemark.country
+                self.event.state = firstPlacemark.administrativeArea
+                self.event.city = firstPlacemark.locality
+
+                //build event
+                self.event.name = self.name.text
+                self.event.details = self.details.text
+                self.event.address = self.address.text
+                
+                if !self.edit {
+                    self.event.owner = pm.user
+                }
+                
+                //store data
+                pm.save(self.event)
+            
+                if(self.activityVC == nil) {
+                    let vc = self.presentingViewController as!  UITabBarController
+                    self.activityVC  = vc.selectedViewController as! ActivityViewController
+                }
+                
+                //update tableview
+                if self.edit {
+                    self.activityVC.updateEvent(self.event)
+                    self.eventVC.event = self.event
+                } else {
+                    self.activityVC.addEvent(self.event)
+                }
+                
+                self.dismissViewControllerAnimated(true, completion: {})
+
+            }
         }
-        
-        //store data
-        pm.save(event)
-        
-        if(activityVC == nil) {
-            let vc = self.presentingViewController as!  UITabBarController
-            activityVC  = vc.selectedViewController as! ActivityViewController
-        }
-        
-        //update tableview
-        if edit {
-            activityVC.updateEvent(event)
-            eventVC.event = event
-        } else {
-            activityVC.addEvent(event)
-        }
-        
-        self.dismissViewControllerAnimated(true, completion: {})
-        
     }
 
     @IBAction func deleteEvent(sender: AnyObject) {
