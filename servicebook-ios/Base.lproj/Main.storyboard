@@ -464,11 +464,11 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Details" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c9Y-Zx-W1A">
-                                                <rect key="frame" x="8" y="94" width="560" height="21"/>
+                                                <rect key="frame" x="8" y="88" width="560" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="2ZC-B1-7w5"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -477,11 +477,15 @@
                                                     </mask>
                                                 </variation>
                                             </label>
+                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p8Z-mX-fmP">
+                                                <rect key="frame" x="0.0" y="117" width="600" height="149"/>
+                                            </mapView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="VlZ-Wp-Iu6" secondAttribute="trailing" constant="519" id="1UF-j9-by3"/>
+                                            <constraint firstItem="p8Z-mX-fmP" firstAttribute="top" secondItem="c9Y-Zx-W1A" secondAttribute="bottom" constant="8" id="3ka-NG-wEv"/>
                                             <constraint firstItem="c9Y-Zx-W1A" firstAttribute="top" secondItem="3Yh-7k-5BH" secondAttribute="bottom" constant="8" id="7QI-tr-PO4"/>
                                             <constraint firstAttribute="trailing" secondItem="3Yh-7k-5BH" secondAttribute="trailing" constant="8" id="BmC-hI-WjT"/>
                                             <constraint firstAttribute="trailing" secondItem="mnO-9J-OGe" secondAttribute="trailing" constant="8" id="ChW-jn-XHK"/>
@@ -491,9 +495,12 @@
                                             <constraint firstItem="mnO-9J-OGe" firstAttribute="leading" secondItem="Qsr-Rh-GkG" secondAttribute="leading" constant="8" id="NeB-Uw-3bu"/>
                                             <constraint firstItem="3Yh-7k-5BH" firstAttribute="top" secondItem="mnO-9J-OGe" secondAttribute="bottom" constant="8" id="TsZ-0E-n0L"/>
                                             <constraint firstItem="3Yh-7k-5BH" firstAttribute="leading" secondItem="Qsr-Rh-GkG" secondAttribute="leading" constant="8" id="WBq-jG-bay"/>
+                                            <constraint firstAttribute="bottom" secondItem="p8Z-mX-fmP" secondAttribute="bottom" constant="8" id="XHc-0g-T9d"/>
                                             <constraint firstItem="3Yh-7k-5BH" firstAttribute="top" secondItem="mnO-9J-OGe" secondAttribute="bottom" constant="8" id="a7r-0Z-n27"/>
                                             <constraint firstItem="mnO-9J-OGe" firstAttribute="top" secondItem="VlZ-Wp-Iu6" secondAttribute="bottom" constant="8" id="dGQ-7K-YaK"/>
                                             <constraint firstItem="VlZ-Wp-Iu6" firstAttribute="top" secondItem="Qsr-Rh-GkG" secondAttribute="top" constant="8" id="hJC-Qv-SJc"/>
+                                            <constraint firstItem="p8Z-mX-fmP" firstAttribute="leading" secondItem="Qsr-Rh-GkG" secondAttribute="leading" id="lN9-on-sh1"/>
+                                            <constraint firstAttribute="trailing" secondItem="p8Z-mX-fmP" secondAttribute="trailing" id="pRt-bH-65h"/>
                                             <constraint firstItem="c9Y-Zx-W1A" firstAttribute="leading" secondItem="Qsr-Rh-GkG" secondAttribute="leading" constant="8" id="ulF-ql-vEV"/>
                                         </constraints>
                                     </view>
@@ -530,6 +537,7 @@
                     <connections>
                         <outlet property="details" destination="c9Y-Zx-W1A" id="P00-5e-vZO"/>
                         <outlet property="location" destination="mnO-9J-OGe" id="H25-6o-cj3"/>
+                        <outlet property="mapView" destination="p8Z-mX-fmP" id="8ZS-3P-GQD"/>
                         <outlet property="name" destination="VlZ-Wp-Iu6" id="pz6-e4-0wc"/>
                         <outlet property="navigationBar" destination="21a-Sb-QRL" id="Taz-Hc-EFv"/>
                         <outlet property="time" destination="3Yh-7k-5BH" id="M6q-my-TGi"/>
