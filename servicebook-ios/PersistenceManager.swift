@@ -26,6 +26,7 @@ class PersistenceManager {
         
         baseUrl = NSURL(string: "https://servicebook-api.herokuapp.com/")
         spine = Spine(baseURL: baseUrl)
+        spine.serializer.keyFormatter = AsIsKeyFormatter()
         registerResources()
         
         setUser("christopher.e.williamson@gmail.com")

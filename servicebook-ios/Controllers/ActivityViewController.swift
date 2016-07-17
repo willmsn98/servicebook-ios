@@ -18,10 +18,14 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     var events = [Resource]()
     
     var selectedRow:NSIndexPath!
+    
+    let startDateFormatter = NSDateFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         loadEvents()
+        
+        startDateFormatter.dateFormat = "EEEE MMMM d, YYYY"
     }
     
     override func didReceiveMemoryWarning() {
@@ -62,6 +66,9 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         let event = events[indexPath.row] as! Event
         cell.name.text = event.name
         cell.location.text = "\(event.city!), \(event.state!)"
+        if let startDate = event.startTime {
+            cell.date.text = startDateFormatter.stringFromDate(startDate)
+        }
         
         return cell
     }

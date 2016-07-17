@@ -29,11 +29,22 @@ class EventEditViewController: UIViewController {
     var event: Event!
     var edit = false
     
+    let dateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        name.borderStyle = UITextBorderStyle.RoundedRect;
+        name.borderStyle = UITextBorderStyle.RoundedRect
+        
+        dateFormatter.dateFormat = "EEEE, MMMM d, YYYY h:mm a"
+
+        let startTimeDatePicker: UIDatePicker = UIDatePicker()
+        startTimeDatePicker.addTarget(self, action:#selector(EventEditViewController.updateStartTime(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        startTime.inputView = startTimeDatePicker
+        
+        let endTimeDatePicker: UIDatePicker = UIDatePicker()
+        endTimeDatePicker.addTarget(self, action:#selector(EventEditViewController.updateEndTime(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        endTime.inputView = endTimeDatePicker
         
         //editing
         if(event != nil) {
@@ -48,6 +59,12 @@ class EventEditViewController: UIViewController {
             name.text = event.name
             details.text = event.details
             address.text = event.address
+            if let startTime = event.startTime {
+                self.startTime.text = dateFormatter.stringFromDate(startTime)
+            }
+            if let endTime = event.endTime {
+                self.endTime.text = dateFormatter.stringFromDate(endTime)
+            }
         } else {
             event = Event()
             deleteButton.hidden = true
@@ -120,5 +137,20 @@ class EventEditViewController: UIViewController {
         
         self.dismissViewControllerAnimated(true, completion: {})
     }
-
+    
+    func updateStartTime(sender: UIDatePicker) {
+        self.startTime.text = dateFormatter.stringFromDate(sender.date)
+        self.event.startTime = sender.date
+    }
+    
+    func updateEndTime(sender: UIDatePicker) {
+        self.endTime.text = dateFormatter.stringFromDate(sender.date)
+        self.event.endTime = sender.date
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
+        self.view.endEditing(true)
+    }
+    
 }

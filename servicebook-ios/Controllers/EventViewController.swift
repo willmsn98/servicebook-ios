@@ -22,9 +22,13 @@ class EventViewController: UIViewController {
     
     var event: Event!
     var activityVC: ActivityViewController!
+    let startDateFormatter = NSDateFormatter()
+    let endDateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        startDateFormatter.dateFormat = "EEEE, MMMM d, YYYY h:mm a"
+        endDateFormatter.dateFormat = "h:mm a"
         update()
     }
     
@@ -55,7 +59,13 @@ class EventViewController: UIViewController {
         name.text = event.name
         details.text = event.details
         location.text = event.address
-        time.text = "Time to be determined"
+        if let startTime = event.startTime {
+            time.text = startDateFormatter.stringFromDate(startTime)
+            if let endTime = event.endTime {
+                time.text = String(format: "%@ - %@", startDateFormatter.stringFromDate(startTime), endDateFormatter.stringFromDate(endTime))
+            }
+        }
+        
         
         let coder = CLGeocoder()
         coder.geocodeAddressString(event.address!) { (placemarks, error) -> Void in

@@ -17,8 +17,8 @@ class Event: Resource {
     var city: String?
     var state: String?
     var country: String?
-    //var startTime: String?
-    //var endTime: String?
+    var startTime: NSDate?
+    var endTime: NSDate?
     var owner: User?
     //var organization: Organization?
     //var comments: LinkedResourceCollection?
@@ -36,8 +36,8 @@ class Event: Resource {
             "city": Attribute(),
             "state": Attribute(),
             "country": Attribute(),
-            //"startTime": Attribute(),
-            //"endTime": Attribute(),
+            "startTime": DateAttribute(),
+            "endTime": DateAttribute(),
             "owner": ToOneRelationship(User)
             //"organization": ToOneRelationship(Organization),
             //"comments": ToManyRelationship(Comment)
