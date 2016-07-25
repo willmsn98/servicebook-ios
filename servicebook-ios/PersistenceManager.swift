@@ -20,9 +20,9 @@ class PersistenceManager {
     var user: User!
     
     init() {
-        Spine.setLogLevel(.Warning, forDomain: .Spine)
-        Spine.setLogLevel(.Warning, forDomain: .Networking)
-        Spine.setLogLevel(.Warning, forDomain: .Serializing)
+        Spine.setLogLevel(.Debug, forDomain: .Spine)
+        Spine.setLogLevel(.Debug, forDomain: .Networking)
+        Spine.setLogLevel(.Debug, forDomain: .Serializing)
         
         baseUrl = NSURL(string: "https://servicebook-api.herokuapp.com/")
         spine = Spine(baseURL: baseUrl)
@@ -35,6 +35,7 @@ class PersistenceManager {
     func registerResources() {
         spine.registerResource(Event)
         spine.registerResource(User)
+        spine.registerResource(Comment)
     }
     
     func save(resource: Resource) -> Future<Resource, SpineError> {
@@ -86,4 +87,95 @@ class PersistenceManager {
             print("Fetching failed: \(error)")
         }
     }
+    
+    func addComment(text: String, event: Event, user: User) -> Future<[Resource], NSError> {
+        
+        let promise = Promise<[Resource], NSError>()
+
+        let commentsPath: String = "https://servicebook-api.herokuapp.com/event/\(event.id!)/comments"
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: commentsPath)!)
+                
+        request.HTTPMethod = "POST"
+        let bodyString="{" +
+            "   \"data\": [" +
+            "       {" +
+            "           \"type\": \"comment\"," +
+            "           \"attributes\": {" +
+            "               \"text\": \"\(text)\"" +
+            "           }," +
+            "           \"relationships\": {" +
+            "               \"user\": {" +
+            "                   \"data\": { \"type\": \"user\", \"id\": \"\(user.id!)\" }" +
+            "               }," +
+            "               \"event\": {" +
+            "                   \"data\": { \"type\": \"event\", \"id\": \"\(event.id!)\" }" +
+            "               }" +
+            "           }" +
+            "       }]}"
+        
+        let body = bodyString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        request.timeoutInterval = 60
+        request.HTTPBody=body
+        request.HTTPShouldHandleCookies=false
+        request.setValue("application/vnd.api+json", forHTTPHeaderField: "Content-Type")
+
+        
+        let session = NSURLSession.sharedSession()
+
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                promise.failure(error!)
+                return
+            }
+            
+            do {
+                let comments = try self.spine.serializer.deserializeData(data!)
+                promise.success(comments.data ?? [])
+            } catch let error as NSError {
+                promise.failure(error)
+            }
+        }
+        task.resume()
+        
+        return promise.future
+    }
+ 
+    func getComments(event: Event) -> Future<[Resource], NSError> {
+        
+        let promise = Promise<[Resource], NSError>()
+        
+        let commentsPath: String = "https://servicebook-api.herokuapp.com/event/\(event.id!)/comments?include=user"
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: commentsPath)!)
+        
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.HTTPShouldHandleCookies=false
+        request.setValue("application/vnd.api+json", forHTTPHeaderField: "Content-Type")
+        
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                promise.failure(error!)
+                return
+            }
+            do {
+                let comments = try self.spine.serializer.deserializeData(data!)
+                promise.success(comments.data ?? [])
+            } catch let error as NSError {
+                promise.failure(error)
+            }
+        }
+        task.resume()
+        
+        return promise.future
+    }
+
 }

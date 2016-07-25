@@ -20,8 +20,8 @@ class Event: Resource {
     var startTime: NSDate?
     var endTime: NSDate?
     var owner: User?
+    var comments: ResourceCollection?
     //var organization: Organization?
-    //var comments: LinkedResourceCollection?
     //var photos: LinkedResourceCollection?
     
     override class var resourceType: ResourceType {
@@ -38,7 +38,7 @@ class Event: Resource {
             "country": Attribute(),
             "startTime": DateAttribute(),
             "endTime": DateAttribute(),
-            "owner": ToOneRelationship(User)
+            "owner": ToOneRelationship(User),
             //"organization": ToOneRelationship(Organization),
             //"comments": ToManyRelationship(Comment)
             //"photos": ToManyRelationship(Photo)
