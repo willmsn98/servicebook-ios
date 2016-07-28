@@ -43,5 +43,8 @@ class EventCommentViewController: UIViewController {
         // update parent controllers
         self.activityVC.updateEvent(self.event)
         self.eventVC.event = self.event
+        
+        self.dismissViewControllerAnimated(true, completion: {})
+
     }
 }
