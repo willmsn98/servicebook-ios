@@ -14,7 +14,10 @@ class EventTableViewCell : UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var date: UILabel!
- 
+    @IBOutlet weak var icon: UIImageView!
+    
+    @IBOutlet weak var iconHeight: NSLayoutConstraint!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }

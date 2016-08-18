@@ -6,6 +6,10 @@ use_frameworks!
 target 'servicebook-ios' do
 
 pod 'Spine', :git => 'https://github.com/wvteijlingen/Spine.git'
+pod 'Cloudinary'
+pod 'DKImagePickerController'
+pod 'Alamofire'
+pod 'AlamofireImage'
 
 end
 

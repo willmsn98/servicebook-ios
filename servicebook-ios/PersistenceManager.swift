@@ -11,6 +11,8 @@ import Foundation
 import Spine
 import BrightFutures
 
+import Cloudinary
+
 class PersistenceManager {
     
     static let sharedInstance = PersistenceManager()
@@ -20,9 +22,9 @@ class PersistenceManager {
     var user: User!
     
     init() {
-        Spine.setLogLevel(.Debug, forDomain: .Spine)
-        Spine.setLogLevel(.Debug, forDomain: .Networking)
-        Spine.setLogLevel(.Debug, forDomain: .Serializing)
+        Spine.setLogLevel(.Error, forDomain: .Spine)
+        Spine.setLogLevel(.Error, forDomain: .Networking)
+        Spine.setLogLevel(.Error, forDomain: .Serializing)
         
         baseUrl = NSURL(string: "https://servicebook-api.herokuapp.com/")
         spine = Spine(baseURL: baseUrl)
@@ -36,6 +38,8 @@ class PersistenceManager {
         spine.registerResource(Event)
         spine.registerResource(User)
         spine.registerResource(Comment)
+        spine.registerResource(Image)
+
     }
     
     func save(resource: Resource) -> Future<Resource, SpineError> {
@@ -49,14 +53,16 @@ class PersistenceManager {
         return promise.future
     }
     
-    func getEvents() -> Future<ResourceCollection, SpineError> {
-        let promise = Promise<ResourceCollection, SpineError>()
+    func getEvents() -> Future<[Event], SpineError> {
+        let promise = Promise<[Event], SpineError>()
         spine.findAll(Event).onSuccess { resources, meta, jsonapi in
-                promise.success(resources)
-            }.onFailure { error in
-                promise.failure(error)
-                print("Fetching failed: \(error)")
+            if let events = resources.resources as? [Event] {
+                promise.success(events)
             }
+        }.onFailure { error in
+            promise.failure(error)
+            print("Fetching failed: \(error)")
+        }
         return promise.future
     }
     
@@ -88,35 +94,44 @@ class PersistenceManager {
         }
     }
     
-    func addComment(text: String, event: Event, user: User) -> Future<[Resource], NSError> {
+    func addComment(text: String, event: Event, user: User) -> Future<Resource, NSError> {
         
-        let promise = Promise<[Resource], NSError>()
+        let promise = Promise<Resource, NSError>()
 
-        let commentsPath: String = "https://servicebook-api.herokuapp.com/event/\(event.id!)/comments"
+        let commentsPath: String = "https://servicebook-api.herokuapp.com/comment"
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: commentsPath)!)
-                
-        request.HTTPMethod = "POST"
-        let bodyString="{" +
-            "   \"data\": [" +
-            "       {" +
-            "           \"type\": \"comment\"," +
-            "           \"attributes\": {" +
-            "               \"text\": \"\(text)\"" +
-            "           }," +
-            "           \"relationships\": {" +
-            "               \"user\": {" +
-            "                   \"data\": { \"type\": \"user\", \"id\": \"\(user.id!)\" }" +
-            "               }," +
-            "               \"event\": {" +
-            "                   \"data\": { \"type\": \"event\", \"id\": \"\(event.id!)\" }" +
-            "               }" +
-            "           }" +
-            "       }]}"
         
-        let body = bodyString.dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPMethod = "POST"
+        
+        let comment:NSMutableDictionary = NSMutableDictionary()
+        comment["type"] = "comment"
+        comment["attributes"] = ["text" : text]
+        
+        let userObj:NSMutableDictionary = NSMutableDictionary()
+        userObj["type"] = "user"
+        userObj["id"] = user.id
+        
+        let eventObj:NSMutableDictionary = NSMutableDictionary()
+        eventObj["type"] = "event"
+        eventObj["id"] = event.id
+
+        let relationships:NSMutableDictionary = NSMutableDictionary()
+        relationships["user"] = ["data": userObj]
+        relationships["event"] = ["data": eventObj]
+        
+        comment["relationships"] = relationships
+
+        let body:NSMutableDictionary! = ["data": [comment]]
+        
+        var requestBody:NSData?
+        do {
+            requestBody = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions.PrettyPrinted)
+        }catch let error as NSError{
+            print(error.description)
+        }
         
         request.timeoutInterval = 60
-        request.HTTPBody=body
+        request.HTTPBody=requestBody
         request.HTTPShouldHandleCookies=false
         request.setValue("application/vnd.api+json", forHTTPHeaderField: "Content-Type")
 
@@ -134,7 +149,11 @@ class PersistenceManager {
             
             do {
                 let comments = try self.spine.serializer.deserializeData(data!)
-                promise.success(comments.data ?? [])
+                if let comment = comments.data?[0] {
+                    promise.success(comment)
+                } else {
+                    print("Error saving comment")
+                }
             } catch let error as NSError {
                 promise.failure(error)
             }
@@ -143,7 +162,7 @@ class PersistenceManager {
         
         return promise.future
     }
- 
+    
     func getComments(event: Event) -> Future<[Resource], NSError> {
         
         let promise = Promise<[Resource], NSError>()
@@ -176,6 +195,134 @@ class PersistenceManager {
         task.resume()
         
         return promise.future
+    }
+    
+    func getImages(event: Event) -> Future<[Resource], NSError> {
+        
+        let promise = Promise<[Resource], NSError>()
+        
+        let commentsPath: String = "https://servicebook-api.herokuapp.com/event/\(event.id!)/images"
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: commentsPath)!)
+        
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.HTTPShouldHandleCookies=false
+        request.setValue("application/vnd.api+json", forHTTPHeaderField: "Content-Type")
+        
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                promise.failure(error!)
+                return
+            }
+            do {
+                let images = try self.spine.serializer.deserializeData(data!)
+                promise.success(images.data ?? [])
+            } catch let error as NSError {
+                promise.failure(error)
+            }
+        }
+        task.resume()
+        
+        return promise.future
+    }
+    
+    func addImage(url: String, comment: Comment, event: Event, user:User) -> Future<Resource, NSError> {
+        
+        let promise = Promise<Resource, NSError>()
+        
+        let commentsPath: String = "https://servicebook-api.herokuapp.com/image"
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: commentsPath)!)
+        
+        request.HTTPMethod = "POST"
+        
+        let image:NSMutableDictionary = NSMutableDictionary()
+        image["type"] = "image"
+        image["attributes"] = ["url" : url]
+        
+        let userObj:NSMutableDictionary = NSMutableDictionary()
+        userObj["type"] = "user"
+        userObj["id"] = user.id
+        
+        let eventObj:NSMutableDictionary = NSMutableDictionary()
+        eventObj["type"] = "event"
+        eventObj["id"] = event.id
+        
+        let commentObj:NSMutableDictionary = NSMutableDictionary()
+        commentObj["type"] = "comment"
+        commentObj["id"] = comment.id
+        
+        let relationships:NSMutableDictionary = NSMutableDictionary()
+        relationships["user"] = ["data": userObj]
+        relationships["event"] = ["data": eventObj]
+        relationships["comment"] = ["data": commentObj]
+        
+        image["relationships"] = relationships
+        
+        let body:NSMutableDictionary! = ["data": [image]]
+        
+        var requestBody:NSData?
+        do {
+            requestBody = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions.PrettyPrinted)
+        }catch let error as NSError{
+            print(error.description)
+        }
+        
+        request.timeoutInterval = 60
+        request.HTTPBody=requestBody
+        request.HTTPShouldHandleCookies=false
+        request.setValue("application/vnd.api+json", forHTTPHeaderField: "Content-Type")
+        
+        
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                promise.failure(error!)
+                return
+            }
+            
+            do {
+                let images = try self.spine.serializer.deserializeData(data!)
+                if let image = images.data?[0] {
+                    promise.success(image)
+                } else {
+                    print("Error saving image")
+                }
+            } catch let error as NSError {
+                promise.failure(error)
+            }
+        }
+        task.resume()
+        
+        return promise.future
+    }
+    
+
+    func uploadImage(image: UIImage, onCompletion: (status: Bool, url: String?) -> Void) {
+        
+        let cloudinary_url = "cloudinary://267883694991746:HqdoshPbLeMiLvVxv2CaRCf2w_w@hzzpiohnf"
+        let clouder = CLCloudinary(url:cloudinary_url)
+        let forUpload = UIImagePNGRepresentation(image)
+        let uploader:CLUploader = CLUploader(clouder, delegate: nil)
+        uploader.upload(forUpload, options: nil,
+                        withCompletion: { (dataDir, error, code, contect) in
+                            if code < 400 {
+                                onCompletion(status: true,url: dataDir["url"] as? String ?? "")
+                            }else{
+                                onCompletion(status: false,url:"")
+                                
+                            }
+        }) { (bytesSent, totalBytesSent, totalBytesExpectedToWrite, context) in
+            print(bytesSent)
+        }
     }
 
 }

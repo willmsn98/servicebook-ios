@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Spine
+import DKImagePickerController
 
 class EventCommentViewController: UIViewController {
     
@@ -18,6 +19,8 @@ class EventCommentViewController: UIViewController {
     var activityVC: ActivityViewController!
     var eventVC: EventViewController!
     var event: Event!
+    
+    var image:UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +34,18 @@ class EventCommentViewController: UIViewController {
                 
         // update server
         let pm: PersistenceManager = PersistenceManager.sharedInstance
-        pm.addComment(textView.text!, event: event, user: pm.user).onSuccess { comments in
+        pm.addComment(textView.attributedText.string, event: event, user: pm.user).onSuccess { comment in
+            if self.image != nil {
+                let pm = PersistenceManager.sharedInstance
+                pm.uploadImage(self.image!, onCompletion: { (status, url) in
+                    if url != nil && comment is Comment {
+                        pm.addImage(url!, comment: comment as! Comment, event: self.event, user: pm.user).onSuccess { image in
+                            print("Saved image")
+                        }
+                    }
+                })
+            }
+            
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.eventVC.loadComments()
             })
@@ -47,4 +61,26 @@ class EventCommentViewController: UIViewController {
         self.dismissViewControllerAnimated(true, completion: {})
 
     }
+    
+    @IBAction func choosePicture(sender: AnyObject) {
+        let pickerController = DKImagePickerController()
+        pickerController.maxSelectableCount = 1
+        
+        pickerController.didSelectAssets = { (assets: [DKAsset]) in
+            if assets.count == 1 {
+                let asset = assets[0]
+                asset.fetchImageWithSize(CGSize(width: 300, height: 300), completeBlock: { image, info in
+                    let attachment = NSTextAttachment()
+                    attachment.image = image
+                    let attString = NSAttributedString(attachment: attachment)
+                    self.textView.textStorage.insertAttributedString(attString, atIndex: self.textView.selectedRange.location)
+                    self.image = image
+
+                })
+            }
+        }
+        
+        self.presentViewController(pickerController, animated: true) {}
+    }
+    
 }

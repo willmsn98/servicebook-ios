@@ -1,6 +1,15 @@
 PODS:
+  - Alamofire (3.4.1)
+  - AlamofireImage (2.4.1):
+    - Alamofire (~> 3.3)
   - BrightFutures (3.3.0):
     - Result (~> 1.0)
+  - Cloudinary (1.0.15)
+  - DKImagePickerController (3.3.3):
+    - DKImagePickerController/Camera (= 3.3.3)
+    - DKImagePickerController/ImageManager (= 3.3.3)
+  - DKImagePickerController/Camera (3.3.3)
+  - DKImagePickerController/ImageManager (3.3.3)
   - Result (1.0.2)
   - Spine (0.3):
     - BrightFutures (~> 3.3.0)
@@ -8,6 +17,10 @@ PODS:
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
+  - Alamofire
+  - AlamofireImage
+  - Cloudinary
+  - DKImagePickerController
   - Spine (from `https://github.com/wvteijlingen/Spine.git`)
 
 EXTERNAL SOURCES:
@@ -20,7 +33,11 @@ CHECKOUT OPTIONS:
     :git: https://github.com/wvteijlingen/Spine.git
 
 SPEC CHECKSUMS:
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
+  AlamofireImage: 3ccf3347d9ea24580dc11fb892770a0be6a29826
   BrightFutures: f4b491b3107487a0469973a74f81f334eb0ed60a
+  Cloudinary: f80af4565ec08c521d5e58cb56d9fbe1e4595e40
+  DKImagePickerController: e11852c5306b1a7ea88ca9e8222ed407d1d4f0ed
   Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
   Spine: 6ec4064905e0865ad13839897956cdd15924eb7f
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
