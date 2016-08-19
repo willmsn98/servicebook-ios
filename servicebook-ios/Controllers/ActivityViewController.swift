@@ -162,7 +162,13 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         vc.event = event
         vc.activityVC = self
         
-        presentViewController(vc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @IBAction func newEvent(sender: AnyObject) {
+        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as! EventEditViewController
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     // Functions for updating table

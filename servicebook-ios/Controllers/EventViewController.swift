@@ -54,7 +54,7 @@ class EventViewController: UIViewController, UITableViewDataSource {
         vc.activityVC = activityVC
         vc.eventVC = self
         
-        presentViewController(vc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func writeSomething(sender: AnyObject) {

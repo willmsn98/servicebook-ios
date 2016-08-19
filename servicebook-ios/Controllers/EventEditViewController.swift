@@ -50,8 +50,8 @@ class EventEditViewController: UIViewController {
         if(event != nil) {
             
             //setup UI
-            navigationBar.topItem?.title = "Edit Event"
-            saveButton.title = "Save"
+            self.navigationItem.title = "Edit Event"
+            self.navigationItem.rightBarButtonItem?.title = "Save"
             deleteButton.hidden = false
             edit = true
 
@@ -102,8 +102,8 @@ class EventEditViewController: UIViewController {
                 pm.save(self.event)
             
                 if(self.activityVC == nil) {
-                    let vc = self.presentingViewController as!  UITabBarController
-                    self.activityVC  = vc.selectedViewController as! ActivityViewController
+                    let n: Int! = self.navigationController?.viewControllers.count
+                    self.activityVC = self.navigationController?.viewControllers[n-2] as! ActivityViewController
                 }
                 
                 //update tableview
@@ -114,7 +114,7 @@ class EventEditViewController: UIViewController {
                     self.activityVC.addEvent(self.event)
                 }
                 
-                self.dismissViewControllerAnimated(true, completion: {})
+                self.navigationController?.popViewControllerAnimated(true)
 
             }
         }
