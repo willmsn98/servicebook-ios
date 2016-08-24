@@ -19,15 +19,12 @@ class EventCommentViewController: UIViewController {
     var activityVC: ActivityViewController!
     var eventVC: EventViewController!
     var event: Event!
+    @IBOutlet weak var imageView: UIImageView!
     
     var image:UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-
-    @IBAction func cancel(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     @IBAction func post(sender: AnyObject) {
@@ -58,7 +55,7 @@ class EventCommentViewController: UIViewController {
         self.activityVC.updateEvent(self.event)
         self.eventVC.event = self.event
         
-        self.dismissViewControllerAnimated(true, completion: {})
+        self.navigationController?.popViewControllerAnimated(true)
 
     }
     
@@ -69,11 +66,8 @@ class EventCommentViewController: UIViewController {
         pickerController.didSelectAssets = { (assets: [DKAsset]) in
             if assets.count == 1 {
                 let asset = assets[0]
-                asset.fetchImageWithSize(CGSize(width: 300, height: 300), completeBlock: { image, info in
-                    let attachment = NSTextAttachment()
-                    attachment.image = image
-                    let attString = NSAttributedString(attachment: attachment)
-                    self.textView.textStorage.insertAttributedString(attString, atIndex: self.textView.selectedRange.location)
+                asset.fetchImageWithSize(CGSize(width: (asset.originalAsset?.pixelWidth)!, height: (asset.originalAsset?.pixelHeight)!), completeBlock: { image, info in
+                    self.imageView.image = image
                     self.image = image
 
                 })

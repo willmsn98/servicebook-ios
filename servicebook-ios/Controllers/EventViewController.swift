@@ -14,13 +14,14 @@ import Spine
 
 class EventViewController: UIViewController, UITableViewDataSource {
 
-    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var details: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var commentsTableView: UITableView!
+    
+    @IBOutlet weak var writeSomething: UITextField!
     
     var event: Event!
     var activityVC: ActivityViewController!
@@ -36,10 +37,13 @@ class EventViewController: UIViewController, UITableViewDataSource {
         
         update()
         loadComments()
+        
     }
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        writeSomething.enabled = true
         update()
     }
     
@@ -64,7 +68,9 @@ class EventViewController: UIViewController, UITableViewDataSource {
         vc.activityVC = activityVC
         vc.eventVC = self
         
-        presentViewController(vc, animated: true, completion: nil)
+        writeSomething.resignFirstResponder()
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func update() {
@@ -86,7 +92,7 @@ class EventViewController: UIViewController, UITableViewDataSource {
                 let regionRadius: CLLocationDistance = 1000
                 let coordinateRegion = MKCoordinateRegionMakeWithDistance(placemark.location!.coordinate,
                                                                           regionRadius * 2.0, regionRadius * 2.0)
-                self.mapView.setRegion(coordinateRegion, animated: true)
+                self.mapView.setRegion(coordinateRegion, animated: false)
                 
                 
                 let anotation = MKPointAnnotation()
@@ -120,7 +126,6 @@ class EventViewController: UIViewController, UITableViewDataSource {
         if let user = comment.user {
             cell.userLabel.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
-        
         
         return cell
     }
