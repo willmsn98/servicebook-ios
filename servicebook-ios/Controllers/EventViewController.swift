@@ -20,8 +20,15 @@ class EventViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var details: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var commentsTableView: UITableView!
+
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBOutlet weak var imageViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var writeSomething: UITextField!
+    
+    @IBOutlet weak var moreDetailsButton: UIButton!
+    @IBOutlet weak var detailsHeight: NSLayoutConstraint!
     
     var event: Event!
     var activityVC: ActivityViewController!
@@ -36,8 +43,6 @@ class EventViewController: UIViewController, UITableViewDataSource {
         endDateFormatter.dateFormat = "h:mm a"
         
         update()
-        loadComments()
-        
     }
     
     
@@ -100,6 +105,8 @@ class EventViewController: UIViewController, UITableViewDataSource {
                 self.mapView.addAnnotation(anotation)
             }
         }
+        self.loadImage(event)
+        //self.loadComments()
     }
     
     func loadComments() {
@@ -132,5 +139,57 @@ class EventViewController: UIViewController, UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comments.count
+    }
+    
+    @IBAction func showMoreDetails(sender: AnyObject) {
+        self.details.sizeToFit()
+        self.detailsHeight.constant = self.details.frame.height
+        self.moreDetailsButton.hidden = true
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.details.sizeToFit()
+        })
+    }
+    
+    func loadImage(event: Event) {
+        
+        let pm = PersistenceManager.sharedInstance
+        pm.getImages(event).onSuccess { images in
+                
+            if images.count > 0, let image:Image = images[0] as? Image, let imageUrl = image.url {
+                    
+                // make sure we are using https - required by iOS
+                if let url = NSURL(string: imageUrl.stringByReplacingOccurrencesOfString("http:", withString: "https:")) {
+                    //load image
+                    self.imageView.af_setImageWithURL(url, completion: { response in
+                        if let imageSize  = response.result.value?.size {
+                            
+                            //set height
+                            self.imageViewHeight.constant = self.computeHeight(imageSize)
+                            self.imageViewHeight.priority = 999
+                                
+                        } else {
+                            print("Image not loaded.")
+                        }
+                    })
+                } else {
+                    print("Invalid URL")
+                }
+            }
+            // if no images then set height to disappear
+            else {
+                self.imageViewHeight.constant = 1
+                self.imageView.hidden = true
+            }
+        }.onFailure { error in
+                print(error)
+        }
+    }
+    
+    func computeHeight(imageSize: CGSize) -> CGFloat {
+        let ratio = imageSize.height/imageSize.width
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        return screenSize.width * ratio
+        
     }
 }
