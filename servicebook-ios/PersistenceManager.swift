@@ -163,9 +163,9 @@ class PersistenceManager {
         return promise.future
     }
     
-    func getComments(event: Event) -> Future<[Resource], NSError> {
+    func getComments(event: Event) -> Future<[Comment], NSError> {
         
-        let promise = Promise<[Resource], NSError>()
+        let promise = Promise<[Comment], NSError>()
         
         let commentsPath: String = "https://servicebook-api.herokuapp.com/event/\(event.id!)/comments?include=user"
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: commentsPath)!)
@@ -187,7 +187,7 @@ class PersistenceManager {
             }
             do {
                 let comments = try self.spine.serializer.deserializeData(data!)
-                promise.success(comments.data ?? [])
+                promise.success(comments.data as? [Comment] ?? [])
             } catch let error as NSError {
                 promise.failure(error)
             }

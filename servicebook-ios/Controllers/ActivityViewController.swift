@@ -71,22 +71,24 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
                     // make sure we are using https - required by iOS
                     if let url = NSURL(string: imageUrl.stringByReplacingOccurrencesOfString("http:", withString: "https:")) {
                         //load image
-                        cell.icon.af_setImageWithURL(url, completion: { response in
-                            if let imageSize  = response.result.value?.size {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            cell.icon.af_setImageWithURL(url, completion: { response in
+                                if let imageSize  = response.result.value?.size {
                                 
-                                //cache image
-                                self.images[indexPath.row] = response.result.value
+                                    //cache image
+                                    self.images[indexPath.row] = response.result.value
                                 
-                                //set height
-                                cell.iconHeight.constant = self.computeHeight(imageSize)
-                                cell.iconHeight.priority = 999
+                                    //set height
+                                    cell.iconHeight.constant = self.computeHeight(imageSize)
+                                    cell.iconHeight.priority = 999
                                 
-                                //reload to change height of row
-                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                                    //reload to change height of row
+                                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                                 
-                            } else {
-                                print("Image not loaded.")
-                            }
+                                } else {
+                                    print("Image not loaded.")
+                                }
+                            })
                         })
                     } else {
                         print("Invalid URL")

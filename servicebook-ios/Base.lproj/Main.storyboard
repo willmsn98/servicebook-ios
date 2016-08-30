@@ -749,7 +749,7 @@
                                                     <constraint firstAttribute="height" constant="10" id="CVY-qp-zCT"/>
                                                 </constraints>
                                             </view>
-                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p8Z-mX-fmP">
+                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p8Z-mX-fmP">
                                                 <rect key="frame" x="0.0" y="27" width="599" height="200"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="200" id="eCq-VI-ZFW"/>
@@ -762,12 +762,18 @@
                                             <constraint firstItem="mnO-9J-OGe" firstAttribute="top" secondItem="lhm-MX-tvW" secondAttribute="top" id="9lz-Mv-snV"/>
                                             <constraint firstAttribute="trailing" secondItem="mnO-9J-OGe" secondAttribute="trailing" id="Bs0-jZ-bY9"/>
                                             <constraint firstAttribute="trailing" secondItem="fpJ-xe-vtC" secondAttribute="trailing" id="DCA-W9-om4"/>
+                                            <constraint firstAttribute="bottom" secondItem="p8Z-mX-fmP" secondAttribute="bottom" id="Oou-fg-ADG"/>
                                             <constraint firstAttribute="trailing" secondItem="p8Z-mX-fmP" secondAttribute="trailing" id="XHF-3i-dQV"/>
                                             <constraint firstItem="fpJ-xe-vtC" firstAttribute="leading" secondItem="lhm-MX-tvW" secondAttribute="leading" id="tfi-QY-QBY"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Oou-fg-ADG"/>
+                                            </mask>
+                                        </variation>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="bxb-rS-7UO">
-                                        <rect key="frame" x="20" y="417" width="559" height="56"/>
+                                        <rect key="frame" x="20" y="417" width="559" height="94"/>
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Write Something..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V27-dA-axg">
                                                 <rect key="frame" x="8" y="8" width="543" height="30"/>
@@ -787,25 +793,43 @@
                                                 </connections>
                                             </textField>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1CJ-6t-SEI">
-                                                <rect key="frame" x="8" y="38" width="239" height="10"/>
+                                                <rect key="frame" x="8" y="38" width="239" height="8"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="10" id="NGi-4O-xmF"/>
+                                                    <constraint firstAttribute="height" constant="8" id="NGi-4O-xmF"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L2o-5V-AII">
-                                                <rect key="frame" x="8" y="48" width="30" height="0.0"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="nDZ-ge-bdi">
+                                                <rect key="frame" x="8" y="46" width="55" height="40"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dFP-Pc-aTf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="55" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="Th0-LI-xcI"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="12"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L2o-5V-AII">
+                                                        <rect key="frame" x="0.0" y="20" width="55" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="rko-yQ-B18"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="mZ7-fr-Ptk"/>
+                                                </constraints>
+                                            </stackView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="1CJ-6t-SEI" firstAttribute="leading" secondItem="bxb-rS-7UO" secondAttribute="leading" constant="8" id="2cV-A9-zUC"/>
                                             <constraint firstItem="V27-dA-axg" firstAttribute="leading" secondItem="bxb-rS-7UO" secondAttribute="leading" constant="8" id="SMA-b8-17Q"/>
                                             <constraint firstAttribute="trailing" secondItem="V27-dA-axg" secondAttribute="trailing" constant="8" id="Uor-Vx-lvZ"/>
                                             <constraint firstAttribute="trailing" secondItem="1CJ-6t-SEI" secondAttribute="trailing" constant="312" id="d7i-ma-lqT"/>
-                                            <constraint firstAttribute="trailing" secondItem="L2o-5V-AII" secondAttribute="trailing" constant="521" id="fyX-7V-f7m"/>
-                                            <constraint firstItem="L2o-5V-AII" firstAttribute="leading" secondItem="bxb-rS-7UO" secondAttribute="leading" constant="8" id="xUA-ca-jJo"/>
                                         </constraints>
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
@@ -847,6 +871,7 @@
                                         <exclude reference="3fI-yo-gzQ"/>
                                         <exclude reference="IM4-SA-s2k"/>
                                         <exclude reference="ja9-RM-wE0"/>
+                                        <exclude reference="lUw-ua-PdM"/>
                                         <exclude reference="55E-2o-ZQs"/>
                                         <exclude reference="IHB-Q5-8dC"/>
                                     </mask>
@@ -873,6 +898,10 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="comment" destination="L2o-5V-AII" id="KAq-yl-XKm"/>
+                        <outlet property="commentSpacerHeight" destination="NGi-4O-xmF" id="nJo-oR-OeA"/>
+                        <outlet property="commentStackHeight" destination="mZ7-fr-Ptk" id="FPE-SP-mc0"/>
+                        <outlet property="commentUser" destination="dFP-Pc-aTf" id="Bza-WS-9NU"/>
                         <outlet property="details" destination="c9Y-Zx-W1A" id="P00-5e-vZO"/>
                         <outlet property="detailsHeight" destination="Lv5-xb-oGo" id="vHr-A5-X7v"/>
                         <outlet property="imageView" destination="67n-Dg-fUZ" id="qmf-jF-XqN"/>
