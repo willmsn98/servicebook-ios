@@ -14,8 +14,12 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="wcF-UP-93p" kind="relationship" relationship="viewControllers" id="dcP-OZ-Qgp"/>
@@ -25,15 +29,16 @@
             </objects>
             <point key="canvasLocation" x="-782" y="179"/>
         </scene>
-        <!--Activity-->
+        <!--Navigation Controller-->
         <scene sceneID="72x-cT-25y">
             <objects>
                 <navigationController id="wcF-UP-93p" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Activity" id="D9f-6K-m1V"/>
+                    <tabBarItem key="tabBarItem" title="" id="D9f-6K-m1V"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" translucent="NO" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="ymh-C6-MAT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </navigationBar>
                     <connections>
                         <segue destination="vU2-h8-yyW" kind="relationship" relationship="rootViewController" id="Z63-je-eld"/>
@@ -540,7 +545,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Activity" image="first" id="Utu-cT-m4W"/>
+                    <tabBarItem key="tabBarItem" title="Activity" id="Utu-cT-m4W"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="ukw-Ig-gXs">
                         <barButtonItem key="backBarButtonItem" id="bIj-sK-fk6"/>
@@ -552,6 +557,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="tabItem" destination="Utu-cT-m4W" id="65E-oo-GhP"/>
                         <outlet property="tableView" destination="IEV-Mg-yT1" id="Z9G-TR-zWC"/>
                     </connections>
                 </viewController>
@@ -597,7 +603,7 @@
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VlZ-Wp-Iu6">
                                                         <rect key="frame" x="20" y="0.0" width="579" height="30"/>
-                                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="146" id="H5T-kY-ZHF"/>
                                                         </constraints>
@@ -625,9 +631,9 @@
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organization" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VQl-fM-Lze">
                                                         <rect key="frame" x="20" y="0.0" width="579" height="30"/>
-                                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -655,7 +661,7 @@
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aJg-IS-BOh">
                                                 <rect key="frame" x="0.0" y="100" width="599" height="10"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="10" id="pfQ-Rj-gGB"/>
                                                 </constraints>
@@ -721,46 +727,40 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="34W-Gb-D7B">
                                         <rect key="frame" x="1" y="173" width="598" height="1"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="ZPN-Fa-Lt5"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lhm-MX-tvW">
-                                        <rect key="frame" x="0.0" y="182" width="599" height="227"/>
+                                        <rect key="frame" x="0.0" y="182" width="599" height="230"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location To Be Determined" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mnO-9J-OGe">
-                                                <rect key="frame" x="0.0" y="0.0" width="599" height="17"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHX-LW-8uV">
+                                                <rect key="frame" x="8" y="0.0" width="583" height="20"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="25" id="Nua-2K-J07"/>
+                                                    <constraint firstAttribute="height" constant="20" id="Y06-PN-KCY"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="Nua-2K-J07"/>
-                                                    </mask>
-                                                </variation>
-                                            </label>
+                                                <state key="normal" title="Location To Be Determined"/>
+                                                <connections>
+                                                    <action selector="showMap:" destination="maj-rT-VtV" eventType="touchUpInside" id="nTL-vV-Bsd"/>
+                                                </connections>
+                                            </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fpJ-xe-vtC">
-                                                <rect key="frame" x="0.0" y="17" width="599" height="10"/>
+                                                <rect key="frame" x="0.0" y="20" width="599" height="10"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="10" id="CVY-qp-zCT"/>
                                                 </constraints>
                                             </view>
                                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p8Z-mX-fmP">
-                                                <rect key="frame" x="0.0" y="27" width="599" height="200"/>
+                                                <rect key="frame" x="0.0" y="30" width="599" height="200"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="200" id="eCq-VI-ZFW"/>
                                                 </constraints>
                                             </mapView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="mnO-9J-OGe" firstAttribute="leading" secondItem="lhm-MX-tvW" secondAttribute="leading" id="46I-IX-lUG"/>
+                                            <constraint firstItem="IHX-LW-8uV" firstAttribute="leading" secondItem="lhm-MX-tvW" secondAttribute="leading" constant="8" id="0RN-8D-8UT"/>
                                             <constraint firstItem="p8Z-mX-fmP" firstAttribute="leading" secondItem="lhm-MX-tvW" secondAttribute="leading" id="4v2-UQ-tnQ"/>
-                                            <constraint firstItem="mnO-9J-OGe" firstAttribute="top" secondItem="lhm-MX-tvW" secondAttribute="top" id="9lz-Mv-snV"/>
-                                            <constraint firstAttribute="trailing" secondItem="mnO-9J-OGe" secondAttribute="trailing" id="Bs0-jZ-bY9"/>
                                             <constraint firstAttribute="trailing" secondItem="fpJ-xe-vtC" secondAttribute="trailing" id="DCA-W9-om4"/>
                                             <constraint firstAttribute="bottom" secondItem="p8Z-mX-fmP" secondAttribute="bottom" id="Oou-fg-ADG"/>
                                             <constraint firstAttribute="trailing" secondItem="p8Z-mX-fmP" secondAttribute="trailing" id="XHF-3i-dQV"/>
@@ -772,8 +772,8 @@
                                             </mask>
                                         </variation>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="bxb-rS-7UO">
-                                        <rect key="frame" x="20" y="417" width="559" height="94"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="bxb-rS-7UO">
+                                        <rect key="frame" x="20" y="437" width="559" height="94"/>
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Write Something..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V27-dA-axg">
                                                 <rect key="frame" x="8" y="8" width="543" height="30"/>
@@ -807,7 +807,7 @@
                                                             <constraint firstAttribute="height" constant="20" id="Th0-LI-xcI"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="black" pointSize="12"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L2o-5V-AII">
@@ -816,7 +816,7 @@
                                                             <constraint firstAttribute="height" constant="20" id="rko-yQ-B18"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -906,7 +906,7 @@
                         <outlet property="detailsHeight" destination="Lv5-xb-oGo" id="vHr-A5-X7v"/>
                         <outlet property="imageView" destination="67n-Dg-fUZ" id="qmf-jF-XqN"/>
                         <outlet property="imageViewHeight" destination="1GZ-75-NuO" id="22o-hb-iH8"/>
-                        <outlet property="location" destination="mnO-9J-OGe" id="H25-6o-cj3"/>
+                        <outlet property="location" destination="IHX-LW-8uV" id="OyG-pK-Sxz"/>
                         <outlet property="mapView" destination="p8Z-mX-fmP" id="8ZS-3P-GQD"/>
                         <outlet property="moreDetailsButton" destination="kGG-LU-vb3" id="4Ig-q1-CKb"/>
                         <outlet property="name" destination="VlZ-Wp-Iu6" id="pz6-e4-0wc"/>
@@ -920,7 +920,4 @@
             <point key="canvasLocation" x="717" y="915"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="first" width="30" height="30"/>
-    </resources>
 </document>

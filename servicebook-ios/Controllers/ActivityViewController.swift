@@ -10,10 +10,13 @@ import UIKit
 
 import Alamofire
 import AlamofireImage
+import FontAwesomeKit
 
 class ActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    
+    @IBOutlet weak var tabItem: UITabBarItem!
     
     // event data shown in table
     var events = [Event]()
@@ -28,7 +31,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         
         startDateFormatter.dateFormat = "EEEE MMMM d, YYYY"
-        
+                
         loadEvents()
     }
     

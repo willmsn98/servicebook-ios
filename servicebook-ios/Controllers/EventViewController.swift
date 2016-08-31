@@ -15,33 +15,35 @@ import Spine
 class EventViewController: UIViewController {
 
     @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var location: UIButton!
+
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var details: UILabel!
     @IBOutlet weak var mapView: MKMapView!
 
     @IBOutlet weak var imageView: UIImageView!
-    
     @IBOutlet weak var imageViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var writeSomething: UITextField!
-    
     @IBOutlet weak var commentSpacerHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var commentStackHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var commentUser: UILabel!
     @IBOutlet weak var comment: UILabel!
+    
     @IBOutlet weak var moreDetailsButton: UIButton!
     @IBOutlet weak var detailsHeight: NSLayoutConstraint!
     
+    var coordinates:CLLocationCoordinate2D!
+    
     var event: Event!
     var activityVC: ActivityViewController!
+    
     let startDateFormatter = NSDateFormatter()
     let endDateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         startDateFormatter.dateFormat = "EEEE, MMMM d, YYYY h:mm a"
         endDateFormatter.dateFormat = "h:mm a"
         
@@ -58,11 +60,8 @@ class EventViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         update()
-    }
-    
-    @IBAction func back(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     @IBAction func edit(sender: AnyObject) {
@@ -93,7 +92,7 @@ class EventViewController: UIViewController {
     func update() {
         name.text = event.name
         details.text = event.details
-        location.text = event.address
+        location.setTitle(event.address, forState: UIControlState.Normal)
         if let startTime = event.startTime {
             time.text = startDateFormatter.stringFromDate(startTime)
             if let endTime = event.endTime {
@@ -114,6 +113,8 @@ class EventViewController: UIViewController {
                 
                 let anotation = MKPointAnnotation()
                 anotation.coordinate = (placemark.location?.coordinate)!
+                
+                self.coordinates = anotation.coordinate
                 self.mapView.addAnnotation(anotation)
             }
         }
@@ -191,5 +192,21 @@ class EventViewController: UIViewController {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         return screenSize.width * ratio
         
+    }
+    
+    @IBAction func showMap(sender: AnyObject) {
+        let regionDistance:CLLocationDistance = 1000
+        if mapView.annotations.count > 0 {
+            let coordinates = mapView.annotations[0].coordinate
+            let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
+            let options = [
+                MKLaunchOptionsMapCenterKey: NSValue(MKCoordinate: regionSpan.center),
+                MKLaunchOptionsMapSpanKey: NSValue(MKCoordinateSpan: regionSpan.span)
+            ]
+            let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+            let mapItem = MKMapItem(placemark: placemark)
+            mapItem.name = "\(self.event.address ?? "")"
+            mapItem.openInMapsWithLaunchOptions(options)
+        }
     }
 }

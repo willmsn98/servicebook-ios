@@ -14,7 +14,6 @@ import CoreLocation
 class EventEditViewController: UIViewController {
     
 
-    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var details: UITextView!
     @IBOutlet weak var organization: UITextField!
@@ -22,7 +21,6 @@ class EventEditViewController: UIViewController {
     @IBOutlet weak var endTime: UITextField!
     @IBOutlet weak var address: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var activityVC: ActivityViewController!
     var eventVC: EventViewController!
@@ -70,10 +68,6 @@ class EventEditViewController: UIViewController {
             deleteButton.hidden = true
         }
 
-    }
-    
-    @IBAction func cancel(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     @IBAction func saveEvent(sender: AnyObject) {

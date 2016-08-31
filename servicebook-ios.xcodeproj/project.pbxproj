@@ -10,12 +10,12 @@
 		42256B0F1D4324F2001E17C0 /* EventCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42256B0E1D4324F2001E17C0 /* EventCommentTableViewCell.swift */; };
 		422B91671CCF941100329BF6 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B91661CCF941100329BF6 /* PersistenceManager.swift */; };
 		424B54771CD05D5900F98790 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B54761CD05D5900F98790 /* EventTableViewCell.swift */; };
+		428970011D7694C2009C18E8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428970001D7694C2009C18E8 /* EventEditViewController.swift */; };
 		429BA9DD1D62BC93005E5B10 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BA9DC1D62BC93005E5B10 /* Image.swift */; };
 		42D3C4A91D30C63200CBF083 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D3C4A81D30C63200CBF083 /* EventViewController.swift */; };
 		42EFE5801D3F276E001E37CA /* EventCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EFE57F1D3F276E001E37CA /* EventCommentViewController.swift */; };
 		42EFE5821D3F29D4001E37CA /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EFE5811D3F29D4001E37CA /* Comment.swift */; };
 		42F086D91CCF2BD2002DD573 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F086D81CCF2BD2002DD573 /* Event.swift */; };
-		42F086E01CCF30F4002DD573 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F086DF1CCF30F4002DD573 /* EventEditViewController.swift */; };
 		42F1CA011CD465A8006CBD4E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F1CA001CD465A8006CBD4E /* User.swift */; };
 		42FC1ADC1CC9CE090030F5BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC1ADB1CC9CE090030F5BD /* AppDelegate.swift */; };
 		42FC1AE31CC9CE090030F5BD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42FC1AE11CC9CE090030F5BD /* Main.storyboard */; };
@@ -49,13 +49,13 @@
 		42256B0E1D4324F2001E17C0 /* EventCommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCommentTableViewCell.swift; path = Views/EventCommentTableViewCell.swift; sourceTree = "<group>"; };
 		422B91661CCF941100329BF6 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		424B54761CD05D5900F98790 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = Views/EventTableViewCell.swift; sourceTree = "<group>"; };
+		428970001D7694C2009C18E8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditViewController.swift; path = Controllers/EventEditViewController.swift; sourceTree = "<group>"; };
 		429BA9DC1D62BC93005E5B10 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = Models/Image.swift; sourceTree = "<group>"; };
 		42ACF5C21D5FFF780044255E /* servicebook-ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "servicebook-ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		42D3C4A81D30C63200CBF083 /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewController.swift; path = Controllers/EventViewController.swift; sourceTree = "<group>"; };
 		42EFE57F1D3F276E001E37CA /* EventCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCommentViewController.swift; path = Controllers/EventCommentViewController.swift; sourceTree = "<group>"; };
 		42EFE5811D3F29D4001E37CA /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = Models/Comment.swift; sourceTree = "<group>"; };
 		42F086D81CCF2BD2002DD573 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Event.swift; path = Models/Event.swift; sourceTree = "<group>"; };
-		42F086DF1CCF30F4002DD573 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditViewController.swift; path = Controllers/EventEditViewController.swift; sourceTree = "<group>"; };
 		42F1CA001CD465A8006CBD4E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Models/User.swift; sourceTree = "<group>"; };
 		42FC1AD81CC9CE080030F5BD /* servicebook-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "servicebook-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42FC1ADB1CC9CE090030F5BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -193,7 +193,7 @@
 			children = (
 				42FC1B211CC9E4950030F5BD /* ActivityViewController.swift */,
 				42EFE57F1D3F276E001E37CA /* EventCommentViewController.swift */,
-				42F086DF1CCF30F4002DD573 /* EventEditViewController.swift */,
+				428970001D7694C2009C18E8 /* EventEditViewController.swift */,
 				42D3C4A81D30C63200CBF083 /* EventViewController.swift */,
 			);
 			name = Controllers;
@@ -399,7 +399,7 @@
 				42F1CA011CD465A8006CBD4E /* User.swift in Sources */,
 				42EFE5821D3F29D4001E37CA /* Comment.swift in Sources */,
 				429BA9DD1D62BC93005E5B10 /* Image.swift in Sources */,
-				42F086E01CCF30F4002DD573 /* EventEditViewController.swift in Sources */,
+				428970011D7694C2009C18E8 /* EventEditViewController.swift in Sources */,
 				42256B0F1D4324F2001E17C0 /* EventCommentTableViewCell.swift in Sources */,
 				42D3C4A91D30C63200CBF083 /* EventViewController.swift in Sources */,
 				42F086D91CCF2BD2002DD573 /* Event.swift in Sources */,
