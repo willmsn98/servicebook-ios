@@ -772,8 +772,8 @@
                                             </mask>
                                         </variation>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="bxb-rS-7UO">
-                                        <rect key="frame" x="20" y="437" width="559" height="94"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="bxb-rS-7UO">
+                                        <rect key="frame" x="20" y="420" width="559" height="94"/>
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Write Something..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V27-dA-axg">
                                                 <rect key="frame" x="8" y="8" width="543" height="30"/>
@@ -860,7 +860,7 @@
                                     <constraint firstAttribute="bottom" secondItem="lhm-MX-tvW" secondAttribute="bottom" constant="84" id="lUw-ua-PdM"/>
                                     <constraint firstItem="34W-Gb-D7B" firstAttribute="trailing" secondItem="lhm-MX-tvW" secondAttribute="trailing" id="mwn-hK-RHS"/>
                                     <constraint firstAttribute="trailing" secondItem="67n-Dg-fUZ" secondAttribute="trailing" id="vOO-PT-xqU"/>
-                                    <constraint firstAttribute="bottom" secondItem="bxb-rS-7UO" secondAttribute="bottom" constant="20" id="yc6-34-IZL"/>
+                                    <constraint firstAttribute="bottom" secondItem="bxb-rS-7UO" secondAttribute="bottom" id="yc6-34-IZL"/>
                                     <constraint firstAttribute="trailing" secondItem="bxb-rS-7UO" secondAttribute="trailing" constant="20" id="ylL-Th-7sZ"/>
                                     <constraint firstItem="67n-Dg-fUZ" firstAttribute="top" secondItem="34W-Gb-D7B" secondAttribute="bottom" id="zAf-n2-bYq"/>
                                 </constraints>

@@ -10,7 +10,6 @@ import UIKit
 
 import Alamofire
 import AlamofireImage
-import FontAwesomeKit
 
 class ActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
