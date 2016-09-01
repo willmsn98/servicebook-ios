@@ -10,15 +10,18 @@ import Foundation
 import UIKit
 import MapKit
 import CoreLocation
-import Spine
 
 class EventViewController: UIViewController {
 
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var location: UIButton!
-
     @IBOutlet weak var time: UILabel!
+
     @IBOutlet weak var details: UILabel!
+    @IBOutlet weak var moreDetailsButton: UIButton!
+    @IBOutlet weak var detailsHeight: NSLayoutConstraint!
+
+    
     @IBOutlet weak var mapView: MKMapView!
 
     @IBOutlet weak var imageView: UIImageView!
@@ -26,14 +29,9 @@ class EventViewController: UIViewController {
     
     @IBOutlet weak var writeSomething: UITextField!
     @IBOutlet weak var commentSpacerHeight: NSLayoutConstraint!
-    @IBOutlet weak var commentStackHeight: NSLayoutConstraint!
     @IBOutlet weak var commentUser: UILabel!
     @IBOutlet weak var comment: UILabel!
     
-    @IBOutlet weak var moreDetailsButton: UIButton!
-    @IBOutlet weak var detailsHeight: NSLayoutConstraint!
-    
-    var coordinates:CLLocationCoordinate2D!
     
     var event: Event!
     var activityVC: ActivityViewController!
@@ -50,22 +48,17 @@ class EventViewController: UIViewController {
         update()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        dispatch_async(dispatch_get_main_queue(), {
-            self.writeSomething.enabled = true
-        })
-    }
-    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
         update()
     }
     
+    // Function for editing event
+    
     @IBAction func edit(sender: AnyObject) {
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as! EventEditViewController
+        guard let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as? EventEditViewController else {
+            return
+        }
         
         vc.event = event
         vc.activityVC = activityVC
@@ -74,13 +67,18 @@ class EventViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    // Function for launching comment view
+    
     @IBAction func writeSomething(sender: AnyObject) {
         
+        // Deselect after click
         dispatch_async(dispatch_get_main_queue(), {
             self.writeSomething.enabled = false
         })
         
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventCommentViewController") as! EventCommentViewController
+        guard let vc = storyboard?.instantiateViewControllerWithIdentifier("EventCommentViewController") as? EventCommentViewController else {
+            return
+        }
         
         vc.event = event
         vc.activityVC = activityVC
@@ -89,9 +87,17 @@ class EventViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    // Function for loading data into the view
+    
     func update() {
         name.text = event.name
+        
         details.text = event.details
+        if event.details == "" {
+            detailsHeight.constant = 0
+            moreDetailsButton.hidden = true
+        }
+        
         location.setTitle(event.address, forState: UIControlState.Normal)
         if let startTime = event.startTime {
             time.text = startDateFormatter.stringFromDate(startTime)
@@ -101,39 +107,43 @@ class EventViewController: UIViewController {
         }
         
         let coder = CLGeocoder()
-        coder.geocodeAddressString(event.address!) { (placemarks, error) -> Void in
-            
-            
-            if let placemark = placemarks?[0] {
-                let regionRadius: CLLocationDistance = 1000
-                let coordinateRegion = MKCoordinateRegionMakeWithDistance(placemark.location!.coordinate,
-                                                                          regionRadius * 2.0, regionRadius * 2.0)
-                self.mapView.setRegion(coordinateRegion, animated: false)
-                
-                
-                let anotation = MKPointAnnotation()
-                anotation.coordinate = (placemark.location?.coordinate)!
-                
-                self.coordinates = anotation.coordinate
-                self.mapView.addAnnotation(anotation)
+        if let address = event.address {
+            coder.geocodeAddressString(address) { (placemarks, error) -> Void in
+                if let location = placemarks?[0].location {
+                    let regionRadius: CLLocationDistance = 1000
+                    let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                              regionRadius * 2.0, regionRadius * 2.0)
+                    self.mapView.setRegion(coordinateRegion, animated: false)
+                    
+                    let anotation = MKPointAnnotation()
+                    anotation.coordinate = (location.coordinate)
+                    
+                    self.mapView.addAnnotation(anotation)
+                }
             }
         }
-        self.loadImage(event)
+        self.loadImage()
         self.loadComments()
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.writeSomething.enabled = true
+        })
     }
     
     func loadComments() {
         let pm = PersistenceManager.sharedInstance
         pm.getComments(event).onSuccess { comments in
             if comments.count > 0 {
-                self.comment.text = comments[0].text
-                self.commentUser.sizeToFit()
-                self.commentUser.text = "\(comments[0].user?.firstName ?? "") \(comments[0].user?.lastName ?? "")"
-                self.comment.sizeToFit()
-                self.commentSpacerHeight.constant = 8
-            } else {
-                self.commentStackHeight.constant = 0
-                self.commentSpacerHeight.constant = 0
+                if comments[0].text != nil && comments[0].text != "", let text = comments[0].text {
+                    self.comment.text = text
+                    self.comment.sizeToFit()
+                    self.commentUser.sizeToFit()
+                    self.commentUser.text = "\(comments[0].user?.firstName ?? "") \(comments[0].user?.lastName ?? "")"
+                    self.commentSpacerHeight.constant = 8
+                } else {
+                    self.commentUser.text = ""
+                    self.comment.text = ""
+                }
             }
         }.onFailure { error in
             print(error)
@@ -141,17 +151,23 @@ class EventViewController: UIViewController {
     }
     
     @IBAction func showMoreDetails(sender: AnyObject) {
+        
+        //This mixture seems to work the best, but don't think it works all the time.
+        //Seems like should be able to do this in like three lines of code...
+        
         self.details.sizeToFit()
         self.detailsHeight.constant = self.details.frame.height
         self.moreDetailsButton.hidden = true
         
         dispatch_async(dispatch_get_main_queue(), {
+            self.details.text = self.event.details
             self.details.sizeToFit()
+            self.details.hidden = false
+            self.details.backgroundColor = UIColor.whiteColor()
         })
     }
     
-    func loadImage(event: Event) {
-        
+    func loadImage() {
         let pm = PersistenceManager.sharedInstance
         pm.getImages(event).onSuccess { images in
                 
@@ -195,9 +211,9 @@ class EventViewController: UIViewController {
     }
     
     @IBAction func showMap(sender: AnyObject) {
-        let regionDistance:CLLocationDistance = 1000
         if mapView.annotations.count > 0 {
             let coordinates = mapView.annotations[0].coordinate
+            let regionDistance:CLLocationDistance = 1000
             let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
             let options = [
                 MKLaunchOptionsMapCenterKey: NSValue(MKCoordinate: regionSpan.center),

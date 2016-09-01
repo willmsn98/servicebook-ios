@@ -414,7 +414,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwo-ay-ccK">
-                                                    <rect key="frame" x="8" y="16" width="576" height="17"/>
+                                                    <rect key="frame" x="8" y="16" width="576" height="24"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -423,7 +423,7 @@
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date To Be Determined" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4bL-rR-yL1">
-                                                    <rect key="frame" x="8" y="33" width="576" height="21"/>
+                                                    <rect key="frame" x="8" y="40" width="576" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="MWl-Y0-3n2"/>
                                                     </constraints>
@@ -432,7 +432,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location To Be Determined" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="euP-BM-U0i">
-                                                    <rect key="frame" x="8" y="54" width="576" height="21"/>
+                                                    <rect key="frame" x="8" y="61" width="576" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="wJD-M6-tFm"/>
                                                     </constraints>
@@ -444,7 +444,7 @@
                                                     </variation>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Uuc-ps-Q8D">
-                                                    <rect key="frame" x="0.0" y="83" width="600" height="0.0"/>
+                                                    <rect key="frame" x="0.0" y="90" width="600" height="1"/>
                                                     <color key="backgroundColor" red="0.00063285614525143696" green="0.00063285614525143696" blue="0.00063285614525143696" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -466,7 +466,7 @@
                                                 <constraint firstItem="vwo-ay-ccK" firstAttribute="leading" secondItem="gTy-pX-GCe" secondAttribute="leadingMargin" id="Q04-Lc-19S"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="Uuc-ps-Q8D" secondAttribute="bottom" constant="-8" id="S9H-yZ-5Gf"/>
                                                 <constraint firstItem="euP-BM-U0i" firstAttribute="top" secondItem="vwo-ay-ccK" secondAttribute="bottom" id="SHd-CI-Jmi"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Uuc-ps-Q8D" secondAttribute="bottom" constant="8" id="TLV-VB-hBy"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Uuc-ps-Q8D" secondAttribute="bottom" id="TLV-VB-hBy"/>
                                                 <constraint firstItem="euP-BM-U0i" firstAttribute="leading" secondItem="Uuc-ps-Q8D" secondAttribute="trailing" constant="8" id="V64-jD-VBf"/>
                                                 <constraint firstItem="euP-BM-U0i" firstAttribute="top" secondItem="gTy-pX-GCe" secondAttribute="topMargin" constant="8" id="VLl-y7-PzQ"/>
                                                 <constraint firstItem="euP-BM-U0i" firstAttribute="leading" secondItem="gTy-pX-GCe" secondAttribute="leadingMargin" constant="8" id="VPm-LH-ArV"/>
@@ -683,17 +683,11 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Details Text" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c9Y-Zx-W1A">
                                                 <rect key="frame" x="20" y="0.0" width="559" height="30"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="100" id="2ZC-B1-7w5"/>
-                                                    <constraint firstAttribute="height" constant="30" id="fWO-r9-foe"/>
+                                                    <constraint firstAttribute="height" priority="800" constant="30" id="fWO-r9-foe"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="2ZC-B1-7w5"/>
-                                                    </mask>
-                                                </variation>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kGG-LU-vb3">
                                                 <rect key="frame" x="20" y="30" width="30" height="17"/>
@@ -821,7 +815,7 @@
                                                     </label>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="mZ7-fr-Ptk"/>
+                                                    <constraint firstAttribute="height" priority="800" constant="40" id="mZ7-fr-Ptk"/>
                                                 </constraints>
                                             </stackView>
                                         </subviews>
@@ -900,7 +894,6 @@
                     <connections>
                         <outlet property="comment" destination="L2o-5V-AII" id="KAq-yl-XKm"/>
                         <outlet property="commentSpacerHeight" destination="NGi-4O-xmF" id="nJo-oR-OeA"/>
-                        <outlet property="commentStackHeight" destination="mZ7-fr-Ptk" id="FPE-SP-mc0"/>
                         <outlet property="commentUser" destination="dFP-Pc-aTf" id="Bza-WS-9NU"/>
                         <outlet property="details" destination="c9Y-Zx-W1A" id="P00-5e-vZO"/>
                         <outlet property="detailsHeight" destination="Lv5-xb-oGo" id="vHr-A5-X7v"/>

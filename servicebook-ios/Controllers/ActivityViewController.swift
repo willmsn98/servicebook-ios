@@ -73,24 +73,24 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
                     // make sure we are using https - required by iOS
                     if let url = NSURL(string: imageUrl.stringByReplacingOccurrencesOfString("http:", withString: "https:")) {
                         //load image
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            cell.icon.af_setImageWithURL(url, completion: { response in
-                                if let imageSize  = response.result.value?.size {
+                        cell.icon.af_setImageWithURL(url, completion: { response in
+                            if let imageSize  = response.result.value?.size {
                                 
-                                    //cache image
-                                    self.images[indexPath.row] = response.result.value
+                                //cache image
+                                self.images[indexPath.row] = response.result.value
                                 
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
                                     //set height
                                     cell.iconHeight.constant = self.computeHeight(imageSize)
                                     cell.iconHeight.priority = 999
                                 
                                     //reload to change height of row
                                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                                
-                                } else {
-                                    print("Image not loaded.")
-                                }
-                            })
+                                })
+                            } else {
+                                print("Image not loaded.")
+                            }
                         })
                     } else {
                         print("Invalid URL")
@@ -135,7 +135,9 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventTableViewCell", forIndexPath: indexPath) as! EventTableViewCell
+        guard let cell = tableView.dequeueReusableCellWithIdentifier("EventTableViewCell", forIndexPath: indexPath) as? EventTableViewCell else {
+            return UITableViewCell()
+        }
         
         let event = events[indexPath.row]
         
@@ -159,7 +161,9 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         
         selectedRow = indexPath
         
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as! EventViewController
+        guard let vc = storyboard?.instantiateViewControllerWithIdentifier("EventViewController") as? EventViewController else {
+            return
+        }
         
         let event = events[indexPath.row]
 
@@ -169,8 +173,12 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    // Function for creating new event
+    
     @IBAction func newEvent(sender: AnyObject) {
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as! EventEditViewController
+        guard let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as? EventEditViewController else {
+            return
+        }
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
