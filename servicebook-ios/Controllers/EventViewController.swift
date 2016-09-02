@@ -207,7 +207,6 @@ class EventViewController: UIViewController {
         let ratio = imageSize.height/imageSize.width
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         return screenSize.width * ratio
-        
     }
     
     @IBAction func showMap(sender: AnyObject) {

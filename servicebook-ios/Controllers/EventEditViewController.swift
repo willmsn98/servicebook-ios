@@ -10,6 +10,8 @@ import Foundation
 
 import UIKit
 import CoreLocation
+import MapKit
+import DKImagePickerController
 
 class EventEditViewController: UIViewController {
     
@@ -21,6 +23,11 @@ class EventEditViewController: UIViewController {
     @IBOutlet weak var endTime: UITextField!
     @IBOutlet weak var address: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
+    
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageViewHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var mapView: MKMapView!
     
     var activityVC: ActivityViewController!
     var eventVC: EventViewController!
@@ -111,6 +118,60 @@ class EventEditViewController: UIViewController {
                 self.navigationController?.popViewControllerAnimated(true)
 
             }
+        }
+    }
+    
+    @IBAction func choosePicture(sender: AnyObject) {
+        let pickerController = DKImagePickerController()
+        pickerController.maxSelectableCount = 1
+        
+        pickerController.didSelectAssets = { (assets: [DKAsset]) in
+            if assets.count == 1 {
+                let asset = assets[0]
+                asset.fetchImageWithSize(CGSize(width: (asset.originalAsset?.pixelWidth)!, height: (asset.originalAsset?.pixelHeight)!), completeBlock: { image, info in
+                    self.imageView.image = image
+                    if let imageSize  = image?.size {
+                        
+                        //set height
+                        self.imageViewHeight.constant = self.computeHeight(imageSize)
+                        self.imageViewHeight.priority = 999
+                        
+                    } else {
+                        print("Image not loaded.")
+                    }
+                })
+            }
+        }
+        
+        self.presentViewController(pickerController, animated: true) {}
+    }
+    
+    func computeHeight(imageSize: CGSize) -> CGFloat {
+        let ratio = imageSize.height/imageSize.width
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        return screenSize.width * ratio
+    }
+    
+    
+    @IBAction func loadMap(sender: AnyObject) {
+        let coder = CLGeocoder()
+        if let textField = sender as? UITextField, let address = textField.text {
+            coder.geocodeAddressString(address) { (placemarks, error) -> Void in
+                if let location = placemarks?[0].location {
+                    let regionRadius: CLLocationDistance = 1000
+                    let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                              regionRadius * 2.0, regionRadius * 2.0)
+                    self.mapView.setRegion(coordinateRegion, animated: false)
+                    
+                    let anotation = MKPointAnnotation()
+                    anotation.coordinate = (location.coordinate)
+                    
+                    self.mapView.addAnnotation(anotation)
+                }
+            }
+            
+        }
+        if let address = event.address {
         }
     }
 
