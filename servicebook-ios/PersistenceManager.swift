@@ -231,7 +231,7 @@ class PersistenceManager {
         return promise.future
     }
     
-    func addImage(url: String, comment: Comment, event: Event, user:User) -> Future<Resource, NSError> {
+    func addImage(url: String, comment: Comment?, event: Event, user:User) -> Future<Resource, NSError> {
         
         let promise = Promise<Resource, NSError>()
         
@@ -244,22 +244,24 @@ class PersistenceManager {
         image["type"] = "image"
         image["attributes"] = ["url" : url]
         
+        let relationships:NSMutableDictionary = NSMutableDictionary()
+
         let userObj:NSMutableDictionary = NSMutableDictionary()
         userObj["type"] = "user"
         userObj["id"] = user.id
+        relationships["user"] = ["data": userObj]
         
         let eventObj:NSMutableDictionary = NSMutableDictionary()
         eventObj["type"] = "event"
         eventObj["id"] = event.id
-        
-        let commentObj:NSMutableDictionary = NSMutableDictionary()
-        commentObj["type"] = "comment"
-        commentObj["id"] = comment.id
-        
-        let relationships:NSMutableDictionary = NSMutableDictionary()
-        relationships["user"] = ["data": userObj]
         relationships["event"] = ["data": eventObj]
-        relationships["comment"] = ["data": commentObj]
+        
+        if let commentId = comment?.id {
+            let commentObj:NSMutableDictionary = NSMutableDictionary()
+            commentObj["type"] = "comment"
+            commentObj["id"] = commentId
+            relationships["comment"] = ["data": commentObj]
+        }
         
         image["relationships"] = relationships
         

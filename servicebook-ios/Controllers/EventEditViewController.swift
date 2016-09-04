@@ -99,20 +99,32 @@ class EventEditViewController: UIViewController {
                     self.event.owner = pm.user
                 }
                 
-                //store data
-                pm.save(self.event)
+                let image = self.imageView.image
+                if let image = image {
+                    pm.uploadImage(image, onCompletion: { (status, url) in
+                        if url != nil {
+                            pm.addImage(url!, comment: nil, event: self.event, user: pm.user).onSuccess { image in
+                                print("Saved image")
+                            }
+                        }
+                    })
+                }
             
                 if(self.activityVC == nil) {
                     let n: Int! = self.navigationController?.viewControllers.count
                     self.activityVC = self.navigationController?.viewControllers[n-2] as! ActivityViewController
                 }
                 
-                //update tableview
-                if self.edit {
-                    self.activityVC.updateEvent(self.event)
-                    self.eventVC.event = self.event
-                } else {
-                    self.activityVC.addEvent(self.event)
+                pm.save(self.event).onSuccess { event in
+                    if let event = event as? Event {
+                        //update tableview
+                        if self.edit {
+                            self.activityVC.updateEvent(event)
+                            self.eventVC.event = event
+                        } else {
+                            self.activityVC.addEvent(event)
+                        }
+                    }
                 }
                 
                 self.navigationController?.popViewControllerAnimated(true)
@@ -171,8 +183,6 @@ class EventEditViewController: UIViewController {
             }
             
         }
-        if let address = event.address {
-        }
     }
 
     @IBAction func deleteEvent(sender: AnyObject) {
@@ -181,12 +191,8 @@ class EventEditViewController: UIViewController {
         let pm: PersistenceManager = PersistenceManager.sharedInstance
         pm.delete(event)
         
-        //update tableview
-        let vc = self.presentingViewController as!  UITabBarController
-        let activityVC  = vc.selectedViewController as! ActivityViewController
         activityVC.deleteSelectedEvent()
-        
-        self.dismissViewControllerAnimated(true, completion: {})
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func updateStartTime(sender: UIDatePicker) {

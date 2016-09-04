@@ -172,17 +172,19 @@ class EventViewController: UIViewController {
         pm.getImages(event).onSuccess { images in
                 
             if images.count > 0, let image:Image = images[0] as? Image, let imageUrl = image.url {
-                    
-                // make sure we are using https - required by iOS
-                if let url = NSURL(string: imageUrl.stringByReplacingOccurrencesOfString("http:", withString: "https:")) {
+                
+                let fileName = (imageUrl as NSString).lastPathComponent
+                let screenWidth = Int(UIScreen.mainScreen().bounds.size.width)
+                let url = "https://res.cloudinary.com/hzzpiohnf/image/upload/c_scale,w_\(screenWidth)/v1472620103/\(fileName)"
+                if let url = NSURL(string: url) {
                     //load image
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.imageView.af_setImageWithURL(url, completion: { response in
-                            if let imageSize  = response.result.value?.size {
+                            if let imageSize  = response.result.value?.size,
+                            let imageScale = response.result.value?.scale{
                                 
                                 //set height
-                                self.imageViewHeight.constant = self.computeHeight(imageSize)
-                                self.imageViewHeight.priority = 999
+                                self.imageViewHeight.constant = imageSize.height * imageScale
                                 
                             } else {
                                 print("Image not loaded.")
@@ -201,12 +203,6 @@ class EventViewController: UIViewController {
         }.onFailure { error in
                 print(error)
         }
-    }
-    
-    func computeHeight(imageSize: CGSize) -> CGFloat {
-        let ratio = imageSize.height/imageSize.width
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        return screenSize.width * ratio
     }
     
     @IBAction func showMap(sender: AnyObject) {

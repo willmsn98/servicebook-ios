@@ -59,9 +59,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         //if cached
         if let image = images[indexPath.row] {
             cell.icon.image = image
-            cell.iconHeight.constant = self.computeHeight(image.size)
-            cell.iconHeight.priority = 999
-            
+            cell.iconHeight.constant = image.size.height * image.scale
         }
         //if not cached go download an image
         else {
@@ -69,12 +67,16 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
             pm.getImages(event).onSuccess { images in
             
                 if images.count > 0, let image:Image = images[0] as? Image, let imageUrl = image.url {
-                
-                    // make sure we are using https - required by iOS
-                    if let url = NSURL(string: imageUrl.stringByReplacingOccurrencesOfString("http:", withString: "https:")) {
+                    
+                    let fileName = (imageUrl as NSString).lastPathComponent
+                    let screenWidth = Int(UIScreen.mainScreen().bounds.size.width)
+                    let url = "https://res.cloudinary.com/hzzpiohnf/image/upload/c_scale,w_\(screenWidth)/v1472620103/\(fileName)"
+                    if let url = NSURL(string: url) {
+                        
                         //load image
                         cell.icon.af_setImageWithURL(url, completion: { response in
-                            if let imageSize  = response.result.value?.size {
+                            if let imageSize  = response.result.value?.size,
+                            let imageScale = response.result.value?.scale{
                                 
                                 //cache image
                                 self.images[indexPath.row] = response.result.value
@@ -82,8 +84,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
 
                                     //set height
-                                    cell.iconHeight.constant = self.computeHeight(imageSize)
-                                    cell.iconHeight.priority = 999
+                                    cell.iconHeight.constant = imageSize.height * imageScale
                                 
                                     //reload to change height of row
                                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -107,13 +108,6 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func computeHeight(imageSize: CGSize) -> CGFloat {
-        let ratio = imageSize.height/imageSize.width
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        return screenSize.width * ratio
-
-    }
-    
     // Functions for determining table size
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -122,7 +116,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if let image = images[indexPath.row] {
-            return computeHeight(image.size) + 100
+            return image.size.height * image.scale + 100
         }
         return 100
     }
@@ -187,6 +181,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     
     func addEvent(event:Event) {
         events.append(event)
+        images.append(nil)
         tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: events.count-1, inSection: 0)], withRowAnimation: .Automatic)
     }
     

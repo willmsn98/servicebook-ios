@@ -36,7 +36,7 @@ class EventCommentViewController: UIViewController {
                 let pm = PersistenceManager.sharedInstance
                 pm.uploadImage(self.image!, onCompletion: { (status, url) in
                     if url != nil && comment is Comment {
-                        pm.addImage(url!, comment: comment as! Comment, event: self.event, user: pm.user).onSuccess { image in
+                        pm.addImage(url!, comment: (comment as! Comment), event: self.event, user: pm.user).onSuccess { image in
                             print("Saved image")
                         }
                     }
