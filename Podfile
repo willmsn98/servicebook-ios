@@ -10,6 +10,8 @@ pod 'Cloudinary'
 pod 'DKImagePickerController'
 pod 'Alamofire'
 pod 'AlamofireImage'
+pod 'FacebookCore'
+pod 'FacebookLogin'
 
 end
 
