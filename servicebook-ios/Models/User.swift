@@ -19,21 +19,33 @@ class User: Resource {
     var country: String?
     var email: String?
     var phone: String?
+    var facebookId: String?
     
     override class var resourceType: ResourceType {
         return "user"
     }
     
     override class var fields: [Field] {
-        return fieldsFromDictionary([
+        
+        var fields: [String: Field] = [
             "firstName": Attribute(),
             "lastName": Attribute(),
             "city": Attribute(),
             "state": Attribute(),
             "country": Attribute(),
             "email": Attribute(),
-            "user.email": Attribute(),
-            "phone": Attribute()
-            ])
+            "phone": Attribute(),
+            "facebookId": Attribute(),
+            ]
+        
+        var emailAttribute = Attribute()
+        emailAttribute = emailAttribute.readOnly()
+        fields["user.email"] = emailAttribute
+        
+        var facebookIdAttribute = Attribute()
+        facebookIdAttribute = facebookIdAttribute.readOnly()
+        fields["user.facebookId"] = facebookIdAttribute
+        
+        return fieldsFromDictionary(fields)
     }
 }

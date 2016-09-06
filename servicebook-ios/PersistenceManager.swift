@@ -13,6 +13,8 @@ import BrightFutures
 
 import Cloudinary
 
+import FacebookCore
+
 class PersistenceManager {
     
     static let sharedInstance = PersistenceManager()
@@ -29,9 +31,9 @@ class PersistenceManager {
         baseUrl = NSURL(string: "https://servicebook-api.herokuapp.com/")
         spine = Spine(baseURL: baseUrl)
         spine.serializer.keyFormatter = AsIsKeyFormatter()
+        spine.keyFormatter = AsIsKeyFormatter()
         registerResources()
         
-        setUser("christopher.e.williamson@gmail.com")
     }
     
     func registerResources() {
@@ -78,20 +80,83 @@ class PersistenceManager {
         return promise.future
     }
     
-    func setUser(email: String) {
+    func setUser(facebookId: String) {
         
         var query = Query(resourceType: User.self)
-        query.whereAttribute("user.email", equalTo: email)
+        query.whereAttribute("user.facebookId", equalTo: facebookId)
         
         spine.find(query).onSuccess { resources, meta, jsonapi in
             if resources.count > 0 {
-                self.user = resources.resources[0] as! User
+                if let user = resources.resources[0] as? User {
+                    self.user = user
+                }
             } else {
-                print("No user found: \(email)")
+                let connection = GraphRequestConnection()
+                connection.add(UserRequest()) { (response: NSHTTPURLResponse?,
+                    result: GraphRequestResult<UserRequest>) in
+                    
+                    switch result {
+                    case .Success(let response):
+                        let user = User()
+                        user.firstName = response.firstName
+                        user.lastName = response.lastName
+                        user.email = response.email
+                        user.city = response.location
+                        user.facebookId = response.facebookId
+                        
+                        let pm = PersistenceManager.sharedInstance
+                        pm.save(user).onSuccess(callback: { (user:Resource) in
+                            if let user = user as? User {
+                                self.user = user
+                            }
+                        })
+                    case .Failed(let errorType):
+                        print(errorType)
+                    default:
+                        print("fail")
+                    }
+                }
+                connection.start()
             }
         }.onFailure { error in
             print("Fetching failed: \(error)")
         }
+    }
+    
+    struct UserRequest: GraphRequestProtocol {
+        struct Response: GraphResponseProtocol {
+            init(rawResponse: AnyObject?) {
+                if let response = rawResponse as? Dictionary<String, AnyObject> {
+                    if let facebookId = response["id"] as? String {
+                        self.facebookId = facebookId
+                    }
+                    if let firstName = response["first_name"] as? String {
+                        self.firstName = firstName
+                    }
+                    if let lastName = response["last_name"] as? String {
+                        self.lastName = lastName
+                    }
+                    if let email = response["email"] as? String {
+                        self.email = email
+                    }
+                    if let location = response["location"]?["name"] as? String {
+                        self.location = location
+                    }
+                }
+            }
+            
+            var facebookId:String?
+            var firstName:String?
+            var lastName:String?
+            var email:String?
+            var location:String?
+        }
+        
+        let graphPath = "me"
+        let parameters: [String:AnyObject]? = ["fields":"email,first_name,last_name,location"]
+        let accessToken: AccessToken? = AccessToken.current!
+        let httpMethod: GraphRequestHTTPMethod = .GET
+        let apiVersion = "v2.7"
     }
     
     func addComment(text: String, event: Event, user: User) -> Future<Resource, NSError> {
