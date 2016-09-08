@@ -80,8 +80,10 @@ class PersistenceManager {
         return promise.future
     }
     
-    func setUser(facebookId: String) {
+    func setUser(facebookId: String)  -> Future<User, SpineError> {
         
+        let promise = Promise<User, SpineError>()
+
         var query = Query(resourceType: User.self)
         query.whereAttribute("user.facebookId", equalTo: facebookId)
         
@@ -89,6 +91,7 @@ class PersistenceManager {
             if resources.count > 0 {
                 if let user = resources.resources[0] as? User {
                     self.user = user
+                    promise.success(user)
                 }
             } else {
                 let connection = GraphRequestConnection()
@@ -108,12 +111,11 @@ class PersistenceManager {
                         pm.save(user).onSuccess(callback: { (user:Resource) in
                             if let user = user as? User {
                                 self.user = user
+                                promise.success(user)
                             }
                         })
                     case .Failed(let errorType):
                         print(errorType)
-                    default:
-                        print("fail")
                     }
                 }
                 connection.start()
@@ -121,6 +123,8 @@ class PersistenceManager {
         }.onFailure { error in
             print("Fetching failed: \(error)")
         }
+        
+        return promise.future
     }
     
     struct UserRequest: GraphRequestProtocol {
@@ -157,6 +161,26 @@ class PersistenceManager {
         let accessToken: AccessToken? = AccessToken.current!
         let httpMethod: GraphRequestHTTPMethod = .GET
         let apiVersion = "v2.7"
+    }
+    
+    func getImage(id:String, height:Int) -> Future<UIImage, NSError> {
+
+        let promise = Promise<UIImage, NSError>()
+        
+        if let authToken = AccessToken.current?.authenticationToken {
+            let url = NSURL(string: "https://graph.facebook.com/me/picture?height=100&return_ssl_resources=1&access_token=\(authToken)")
+            let urlRequest = NSURLRequest(URL: url!)
+            NSURLConnection.sendAsynchronousRequest(urlRequest, queue: NSOperationQueue.mainQueue()) { (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
+                
+                // Display the image
+                if let imageData = data,
+                    let image = UIImage(data: imageData) {
+                    promise.success(image)
+                }
+            }
+        }
+        
+        return promise.future
     }
     
     func addComment(text: String, event: Event, user: User) -> Future<Resource, NSError> {

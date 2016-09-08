@@ -11,6 +11,7 @@
 		42256B0F1D4324F2001E17C0 /* EventCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42256B0E1D4324F2001E17C0 /* EventCommentTableViewCell.swift */; };
 		422B91671CCF941100329BF6 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B91661CCF941100329BF6 /* PersistenceManager.swift */; };
 		424B54771CD05D5900F98790 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B54761CD05D5900F98790 /* EventTableViewCell.swift */; };
+		426841051D810E06004F8098 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426841041D810E06004F8098 /* UserViewController.swift */; };
 		428292DF1D7D2D9A00E8349F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428292DE1D7D2D9A00E8349F /* LoginViewController.swift */; };
 		428970011D7694C2009C18E8 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428970001D7694C2009C18E8 /* EventEditViewController.swift */; };
 		429BA9DD1D62BC93005E5B10 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BA9DC1D62BC93005E5B10 /* Image.swift */; };
@@ -56,6 +57,7 @@
 		42256B0E1D4324F2001E17C0 /* EventCommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCommentTableViewCell.swift; path = Views/EventCommentTableViewCell.swift; sourceTree = "<group>"; };
 		422B91661CCF941100329BF6 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		424B54761CD05D5900F98790 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = Views/EventTableViewCell.swift; sourceTree = "<group>"; };
+		426841041D810E06004F8098 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserViewController.swift; path = Controllers/UserViewController.swift; sourceTree = "<group>"; };
 		428292DE1D7D2D9A00E8349F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = Controllers/LoginViewController.swift; sourceTree = "<group>"; };
 		428970001D7694C2009C18E8 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditViewController.swift; path = Controllers/EventEditViewController.swift; sourceTree = "<group>"; };
 		429BA9DC1D62BC93005E5B10 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = Models/Image.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				428970001D7694C2009C18E8 /* EventEditViewController.swift */,
 				42D3C4A81D30C63200CBF083 /* EventViewController.swift */,
 				428292DE1D7D2D9A00E8349F /* LoginViewController.swift */,
+				426841041D810E06004F8098 /* UserViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				42F1CA011CD465A8006CBD4E /* User.swift in Sources */,
 				42EFE5821D3F29D4001E37CA /* Comment.swift in Sources */,
 				429BA9DD1D62BC93005E5B10 /* Image.swift in Sources */,
+				426841051D810E06004F8098 /* UserViewController.swift in Sources */,
 				428970011D7694C2009C18E8 /* EventEditViewController.swift in Sources */,
 				42256B0F1D4324F2001E17C0 /* EventCommentTableViewCell.swift in Sources */,
 				42D3C4A91D30C63200CBF083 /* EventViewController.swift in Sources */,
