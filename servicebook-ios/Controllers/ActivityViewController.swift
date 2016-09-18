@@ -19,8 +19,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     
     // event data shown in table
     var events = [Event]()
-    var images:[UIImage?]!
-        
+    
     // used for knowing which row/event is being viewed, updated or deleted
     var selectedRow:NSIndexPath!
     
@@ -40,9 +39,6 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         let pm = PersistenceManager.sharedInstance
         pm.getEvents().onSuccess { events in
             self.events = events
-            
-            //set or reset images to empty array; load images when creating cells
-            self.images = [UIImage?](count:self.events.count, repeatedValue:nil)
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.tableView.reloadData()
@@ -166,7 +162,6 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     
     func addEvent(event:Event) {
         events.append(event)
-        images.append(nil)
         tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: events.count-1, inSection: 0)], withRowAnimation: .Automatic)
     }
     
