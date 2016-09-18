@@ -24,6 +24,8 @@ class Event: Resource {
     //var organization: Organization?
     //var photos: LinkedResourceCollection?
     
+    var image:Image?
+    
     override class var resourceType: ResourceType {
         return "event"
     }

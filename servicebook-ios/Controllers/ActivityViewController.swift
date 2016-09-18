@@ -20,7 +20,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     // event data shown in table
     var events = [Event]()
     var images:[UIImage?]!
-    
+        
     // used for knowing which row/event is being viewed, updated or deleted
     var selectedRow:NSIndexPath!
     
@@ -53,49 +53,33 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
                     
         }
     }
-    
+
     func loadImage(event: Event, cell: EventTableViewCell, indexPath:NSIndexPath) {
         
         //if cached
-        if let image = images[indexPath.row] {
-            cell.icon.image = image
-            cell.iconHeight.constant = image.size.height * image.scale
+        if let image = event.image, let height = image.height, let scale = image.scale, let url = image.getCloudURL() {
+            cell.iconHeight.constant = height * scale
+            cell.icon.af_setImageWithURL(url)
+            cell.icon.hidden = false
         }
+            
         //if not cached go download an image
         else {
             let pm = PersistenceManager.sharedInstance
             pm.getImages(event).onSuccess { images in
             
-                if images.count > 0, let image:Image = images[0] as? Image, let imageUrl = image.url {
-                    
-                    let fileName = (imageUrl as NSString).lastPathComponent
-                    let screenWidth = Int(UIScreen.mainScreen().bounds.size.width)
-                    let url = "https://res.cloudinary.com/hzzpiohnf/image/upload/c_scale,w_\(screenWidth)/v1472620103/\(fileName)"
-                    if let url = NSURL(string: url) {
-                        
-                        //load image
-                        cell.icon.af_setImageWithURL(url, completion: { response in
-                            if let imageSize  = response.result.value?.size,
-                            let imageScale = response.result.value?.scale{
-                                
-                                //cache image
-                                self.images[indexPath.row] = response.result.value
-                                
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if images.count > 0, let image:Image = images[0] as? Image, let url = image.getCloudURL() {
+                    event.image = image
 
-                                    //set height
-                                    cell.iconHeight.constant = imageSize.height * imageScale
-                                
-                                    //reload to change height of row
-                                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                                })
-                            } else {
-                                print("Image not loaded.")
-                            }
-                        })
-                    } else {
-                        print("Invalid URL")
-                    }
+                    //load image
+                    cell.icon.af_setImageWithURL(url, completion: { response in
+                            
+                        event.image?.height = response.result.value?.size.height
+                        event.image?.scale = response.result.value?.scale
+                            
+                        //reload to change height of row
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    })
                 }
                 // if no images then set height to disappear
                 else {
@@ -115,8 +99,9 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let image = images[indexPath.row] {
-            return image.size.height * image.scale + 100
+        if let imageHeight = events[indexPath.row].image?.height,
+            let imageScale = events[indexPath.row].image?.scale {
+            return imageHeight * imageScale + 100
         }
         return 100
     }
