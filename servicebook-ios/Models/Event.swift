@@ -24,7 +24,7 @@ class Event: Resource {
     //var organization: Organization?
     //var photos: LinkedResourceCollection?
     
-    var image:Image?
+    var primaryImage:Image?
     
     override class var resourceType: ResourceType {
         return "event"
@@ -44,6 +44,7 @@ class Event: Resource {
             //"organization": ToOneRelationship(Organization),
             //"comments": ToManyRelationship(Comment)
             //"photos": ToManyRelationship(Photo)
+            "primaryImage": ToOneRelationship(Image)
             ])
     }
 }

@@ -13,6 +13,8 @@ class Image: Resource {
     
     var url: String?
     var user: User?
+    
+    //transient fields
     var height:CGFloat?
     var scale:CGFloat?
     

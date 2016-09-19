@@ -57,7 +57,12 @@ class PersistenceManager {
     
     func getEvents() -> Future<[Event], SpineError> {
         let promise = Promise<[Event], SpineError>()
-        spine.findAll(Event).onSuccess { resources, meta, jsonapi in
+        
+        var query = Query(resourceType: Event.self, resourceIDs: nil)
+        query.include("primaryImage")
+        query.addAscendingOrder("startTime") // Sort on creation date
+        
+        spine.find(query).onSuccess { resources, meta, jsonapi in
             if let events = resources.resources as? [Event] {
                 promise.success(events)
             }
@@ -397,7 +402,7 @@ class PersistenceManager {
     }
     
 
-    func uploadImage(image: UIImage, onCompletion: (status: Bool, url: String?) -> Void) {
+    func uploadImage(image: UIImage, onCompletion: (status: Bool, image: Image?) -> Void) {
         
         let cloudinary_url = "cloudinary://267883694991746:HqdoshPbLeMiLvVxv2CaRCf2w_w@hzzpiohnf"
         let clouder = CLCloudinary(url:cloudinary_url)
@@ -405,12 +410,21 @@ class PersistenceManager {
         let uploader:CLUploader = CLUploader(clouder, delegate: nil)
         uploader.upload(forUpload, options: nil,
                         withCompletion: { (dataDir, error, code, contect) in
-                            if code < 400 {
-                                onCompletion(status: true,url: dataDir["url"] as? String ?? "")
-                            }else{
-                                onCompletion(status: false,url:"")
-                                
+
+                            let pm = PersistenceManager.sharedInstance
+                            
+                            let image = Image()
+                            image.url = dataDir["url"] as? String ?? ""
+                            image.user = pm.user
+                            
+                            pm.save(image).onSuccess { image in
+                                if code < 400, let image = image as? Image {
+                                    onCompletion(status: true, image: image)
+                                }else{
+                                    onCompletion(status: false, image:nil)
+                                }
                             }
+
         }) { (bytesSent, totalBytesSent, totalBytesExpectedToWrite, context) in
             print(bytesSent)
         }

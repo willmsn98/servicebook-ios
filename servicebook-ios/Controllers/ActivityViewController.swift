@@ -53,7 +53,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     func loadImage(event: Event, cell: EventTableViewCell, indexPath:NSIndexPath) {
         
         //if cached
-        if let image = event.image, let height = image.height, let scale = image.scale, let url = image.getCloudURL() {
+        if let image = event.primaryImage, let height = image.height, let scale = image.scale, let url = image.getCloudURL() {
             cell.iconHeight.constant = height * scale
             cell.icon.af_setImageWithURL(url)
             cell.icon.hidden = false
@@ -61,29 +61,41 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
             
         //if not cached go download an image
         else {
-            let pm = PersistenceManager.sharedInstance
-            pm.getImages(event).onSuccess { images in
+            if let primaryImage = event.primaryImage, let url = primaryImage.getCloudURL() {
+                //load image
+                cell.icon.af_setImageWithURL(url, completion: { response in
+                    
+                    event.primaryImage?.height = response.result.value?.size.height
+                    event.primaryImage?.scale = response.result.value?.scale
+                    
+                    //reload to change height of row
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                })
+            } else {
+                let pm = PersistenceManager.sharedInstance
+                pm.getImages(event).onSuccess { images in
             
-                if images.count > 0, let image:Image = images[0] as? Image, let url = image.getCloudURL() {
-                    event.image = image
+                    if images.count > 0, let image:Image = images[0] as? Image, let url = image.getCloudURL() {
+                        event.primaryImage = image
 
-                    //load image
-                    cell.icon.af_setImageWithURL(url, completion: { response in
+                        //load image
+                        cell.icon.af_setImageWithURL(url, completion: { response in
                             
-                        event.image?.height = response.result.value?.size.height
-                        event.image?.scale = response.result.value?.scale
+                            event.primaryImage?.height = response.result.value?.size.height
+                            event.primaryImage?.scale = response.result.value?.scale
                             
-                        //reload to change height of row
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                    })
+                            //reload to change height of row
+                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        })
+                    }
+                    // if no images then set height to disappear
+                    else {
+                        cell.iconHeight.constant = 1
+                        cell.icon.hidden = true
+                    }
+                }.onFailure { error in
+                        print(error)
                 }
-                // if no images then set height to disappear
-                else {
-                    cell.iconHeight.constant = 1
-                    cell.icon.hidden = true
-                }
-            }.onFailure { error in
-                print(error)
             }
         }
     }
@@ -95,8 +107,8 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let imageHeight = events[indexPath.row].image?.height,
-            let imageScale = events[indexPath.row].image?.scale {
+        if let imageHeight = events[indexPath.row].primaryImage?.height,
+            let imageScale = events[indexPath.row].primaryImage?.scale {
             return imageHeight * imageScale + 100
         }
         return 100
@@ -154,7 +166,7 @@ class ActivityViewController: UIViewController, UITableViewDelegate, UITableView
         guard let vc = storyboard?.instantiateViewControllerWithIdentifier("EventEditViewController") as? EventEditViewController else {
             return
         }
-        
+        vc.activityVC = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

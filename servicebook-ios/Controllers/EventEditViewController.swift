@@ -101,34 +101,31 @@ class EventEditViewController: UIViewController {
                 
                 let image = self.imageView.image
                 if let image = image {
-                    pm.uploadImage(image, onCompletion: { (status, url) in
-                        if url != nil {
-                            pm.addImage(url!, comment: nil, event: self.event, user: pm.user).onSuccess { image in
-                                print("Saved image")
+                    pm.uploadImage(image, onCompletion: { (status, image) in
+                        if image != nil {
+                            
+                            self.event.primaryImage = image                            
+                            pm.save(self.event).onSuccess { event in
+                                self.updateParents()
                             }
                         }
                     })
                 }
-            
-                if(self.activityVC == nil) {
-                    let n: Int! = self.navigationController?.viewControllers.count
-                    self.activityVC = self.navigationController?.viewControllers[n-2] as! ActivityViewController
-                }
-                
-                pm.save(self.event).onSuccess { event in
-                    if let event = event as? Event {
-                        //update tableview
-                        if self.edit {
-                            self.activityVC.updateEvent(event)
-                            self.eventVC.event = event
-                        } else {
-                            self.activityVC.addEvent(event)
-                        }
-                    }
-                }
                 
                 self.navigationController?.popViewControllerAnimated(true)
 
+            }
+        }
+    }
+    
+    func updateParents() {
+        if let event = event as? Event {
+            //update tableview
+            if self.edit {
+                self.activityVC.updateEvent(event)
+                self.eventVC.event = event
+            } else {
+                self.activityVC.addEvent(event)
             }
         }
     }

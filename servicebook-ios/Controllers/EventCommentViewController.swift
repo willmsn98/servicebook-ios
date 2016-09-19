@@ -33,6 +33,7 @@ class EventCommentViewController: UIViewController {
         let pm: PersistenceManager = PersistenceManager.sharedInstance
         pm.addComment(textView.attributedText.string, event: event, user: pm.user).onSuccess { comment in
             if self.image != nil {
+                /*
                 let pm = PersistenceManager.sharedInstance
                 pm.uploadImage(self.image!, onCompletion: { (status, url) in
                     if url != nil && comment is Comment {
@@ -41,6 +42,7 @@ class EventCommentViewController: UIViewController {
                         }
                     }
                 })
+ */
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
