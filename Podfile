@@ -13,6 +13,7 @@ pod 'AlamofireImage'
 pod 'FacebookCore'
 pod 'FacebookLogin'
 pod 'Flurry-iOS-SDK'
+pod 'SwiftOverlays'
 
 end
 

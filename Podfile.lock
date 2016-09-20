@@ -35,6 +35,7 @@ PODS:
   - Spine (0.3):
     - BrightFutures (~> 4.0)
     - SwiftyJSON (~> 2.3)
+  - SwiftOverlays (2.0.1)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
@@ -46,6 +47,7 @@ DEPENDENCIES:
   - FacebookLogin
   - Flurry-iOS-SDK
   - Spine (from `https://github.com/wvteijlingen/Spine.git`)
+  - SwiftOverlays
 
 EXTERNAL SOURCES:
   Spine:
@@ -70,8 +72,9 @@ SPEC CHECKSUMS:
   Flurry-iOS-SDK: 97bbeec09cca666c2f1772f6e161c4f8ccff611e
   Result: 18e1a7597fbcca5923c565b40a25a98afafdee02
   Spine: c7c400cdd44a0a313969fe623698d47460da1c09
+  SwiftOverlays: 317afbb3eeb7f9d8545b1e6592500c89aadb6d8f
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: c28ce34ffc38c1ca84f00d847821ec43d442f12f
+PODFILE CHECKSUM: 8d3959a671907ee0639e2890c996376394ffa57c
 
 COCOAPODS: 1.0.1

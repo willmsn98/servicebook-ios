@@ -168,43 +168,44 @@ class EventViewController: UIViewController {
     }
     
     func loadImage() {
-        let pm = PersistenceManager.sharedInstance
-        pm.getImages(event).onSuccess { images in
-                
-            if images.count > 0, let image:Image = images[0] as? Image, let imageUrl = image.url {
-                
-                let fileName = (imageUrl as NSString).lastPathComponent
-                let screenWidth = Int(UIScreen.mainScreen().bounds.size.width)
-                let url = "https://res.cloudinary.com/hzzpiohnf/image/upload/c_scale,w_\(screenWidth)/v1472620103/\(fileName)"
-                if let url = NSURL(string: url) {
-                    //load image
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.imageView.af_setImageWithURL(url, completion: { response in
-                            if let imageSize  = response.result.value?.size,
-                            let imageScale = response.result.value?.scale{
-                                
-                                //set height
-                                self.imageViewHeight.constant = imageSize.height * imageScale
-                                
-                            } else {
-                                print("Image not loaded.")
-                            }
-                        })
-                    })
+        if let imageUrl = event.primaryImage?.getCloudURL() {
+            self.imageView.af_setImageWithURL(imageUrl, completion: { response in
+                if let imageSize  = response.result.value?.size,
+                    let imageScale = response.result.value?.scale{
+                    
+                    //set height
+                    self.imageViewHeight.constant = imageSize.height * imageScale
+                    self.imageView.hidden = false
+                    
                 } else {
-                    print("Invalid URL")
+                    print("Image not loaded.")
                 }
+            })
+        } else {
+            let pm = PersistenceManager.sharedInstance
+            pm.getImages(event).onSuccess { images in
+                if images.count > 0, let image:Image = images[0] as? Image, let url = image.getCloudURL()  {
+                    self.imageView.af_setImageWithURL(url, completion: { response in
+                        if let imageSize  = response.result.value?.size, let imageScale = response.result.value?.scale {
+                            self.imageViewHeight.constant = imageSize.height * imageScale
+                            self.imageView.hidden = false
+                        } else {
+                            print("Image not loaded.")
+                        }
+                    })
+                }
+                    // if no images then set height to disappear
+                else {
+                    self.imageViewHeight.constant = 1
+                    self.imageView.hidden = true
+                }
+                }.onFailure { error in
+                    print(error)
             }
-            // if no images then set height to disappear
-            else {
-                self.imageViewHeight.constant = 1
-                self.imageView.hidden = true
-            }
-        }.onFailure { error in
-                print(error)
         }
     }
     
+    //opens up in Map app
     @IBAction func showMap(sender: AnyObject) {
         if mapView.annotations.count > 0 {
             let coordinates = mapView.annotations[0].coordinate

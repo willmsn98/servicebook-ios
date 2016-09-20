@@ -58,7 +58,7 @@ class PersistenceManager {
     func getEvents() -> Future<[Event], SpineError> {
         let promise = Promise<[Event], SpineError>()
         
-        var query = Query(resourceType: Event.self, resourceIDs: nil)
+        var query = Query(resourceType: Event.self)
         query.include("primaryImage")
         query.addAscendingOrder("startTime") // Sort on creation date
         
@@ -99,36 +99,48 @@ class PersistenceManager {
                     promise.success(user)
                 }
             } else {
-                let connection = GraphRequestConnection()
-                connection.add(UserRequest()) { (response: NSHTTPURLResponse?,
-                    result: GraphRequestResult<UserRequest>) in
-                    
-                    switch result {
-                    case .Success(let response):
-                        let user = User()
-                        user.firstName = response.firstName
-                        user.lastName = response.lastName
-                        user.email = response.email
-                        user.city = response.location
-                        user.facebookId = response.facebookId
-                        
-                        let pm = PersistenceManager.sharedInstance
-                        pm.save(user).onSuccess(callback: { (user:Resource) in
-                            if let user = user as? User {
-                                self.user = user
-                                promise.success(user)
-                            }
-                        })
-                    case .Failed(let errorType):
-                        print(errorType)
-                    }
-                }
-                connection.start()
+                self.getFacebookUser().onSuccess(callback: { (user) in
+                    let pm = PersistenceManager.sharedInstance
+                    pm.save(user).onSuccess(callback: { (user:Resource) in
+                        if let user = user as? User {
+                            self.user = user
+                            promise.success(user)
+                        }
+                    })
+                })
             }
         }.onFailure { error in
             print("Fetching failed: \(error)")
         }
         
+        return promise.future
+    }
+    
+    func getFacebookUser() -> Future<User, SpineError> {
+        
+        let promise = Promise<User, SpineError>()
+
+        let connection = GraphRequestConnection()
+        connection.add(UserRequest()) { (response: NSHTTPURLResponse?,
+            result: GraphRequestResult<UserRequest>) in
+            
+            switch result {
+            case .Success(let response):
+                let user = User()
+                user.firstName = response.firstName
+                user.lastName = response.lastName
+                user.email = response.email
+                user.city = response.location
+                user.facebookId = response.facebookId
+                
+                promise.success(user)
+                
+            case .Failed(let errorType):
+                print(errorType)
+            }
+        }
+        connection.start()
+
         return promise.future
     }
     
@@ -168,7 +180,7 @@ class PersistenceManager {
         let apiVersion = "v2.7"
     }
     
-    func getImage(id:String, height:Int) -> Future<UIImage, NSError> {
+    func getFacebookImage(id:String, height:Int) -> Future<UIImage, NSError> {
 
         let promise = Promise<UIImage, NSError>()
         

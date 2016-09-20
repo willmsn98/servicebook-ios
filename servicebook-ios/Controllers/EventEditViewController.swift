@@ -12,6 +12,7 @@ import UIKit
 import CoreLocation
 import MapKit
 import DKImagePickerController
+import SwiftOverlays
 
 class EventEditViewController: UIViewController {
     
@@ -70,6 +71,12 @@ class EventEditViewController: UIViewController {
             if let endTime = event.endTime {
                 self.endTime.text = dateFormatter.stringFromDate(endTime)
             }
+            
+            self.enableControls(true)
+            
+            loadImage()
+            loadMap()
+            
         } else {
             event = Event()
             deleteButton.hidden = true
@@ -101,32 +108,50 @@ class EventEditViewController: UIViewController {
                 
                 let image = self.imageView.image
                 if let image = image {
+                    self.enableControls(false)
+                    self.showWaitOverlayWithText("Please wait...")
                     pm.uploadImage(image, onCompletion: { (status, image) in
                         if image != nil {
                             
                             self.event.primaryImage = image                            
                             pm.save(self.event).onSuccess { event in
-                                self.updateParents()
+                                self.close()
                             }
                         }
                     })
+                } else {
+                    pm.save(self.event).onSuccess { event in
+                        self.close()
+                    }
                 }
-                
-                self.navigationController?.popViewControllerAnimated(true)
-
             }
         }
     }
     
+    func enableControls(yes:Bool) {
+        self.name.enabled = yes
+        self.organization.enabled = yes
+        self.startTime.enabled = yes
+        self.endTime.enabled = yes
+        self.address.enabled = yes
+        self.deleteButton.enabled = yes
+        self.details.userInteractionEnabled = yes
+    }
+    
+    func close() {
+        self.updateParents()
+        self.removeAllOverlays()
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     func updateParents() {
-        if let event = event as? Event {
-            //update tableview
-            if self.edit {
-                self.activityVC.updateEvent(event)
-                self.eventVC.event = event
-            } else {
-                self.activityVC.addEvent(event)
-            }
+        //update tableview
+        if self.edit {
+            self.activityVC.updateEvent(event)
+            self.eventVC.event = event
+            self.eventVC.update()
+        } else {
+            self.activityVC.addEvent(event)
         }
     }
     
@@ -155,12 +180,44 @@ class EventEditViewController: UIViewController {
         self.presentViewController(pickerController, animated: true) {}
     }
     
+    func loadImage() {
+        if let imageUrl = event.primaryImage?.getCloudURL() {
+            imageView.af_setImageWithURL(imageUrl, completion: { response in
+                if let image = response.result.value {
+                    //set height
+                    self.imageViewHeight.constant = self.computeHeight(image.size)
+                    self.imageViewHeight.priority = 999
+                }
+
+            })
+        }
+
+    }
+    
     func computeHeight(imageSize: CGSize) -> CGFloat {
         let ratio = imageSize.height/imageSize.width
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         return screenSize.width * ratio
     }
     
+    func loadMap() {
+        let coder = CLGeocoder()
+        if let address = event.address {
+            coder.geocodeAddressString(address) { (placemarks, error) -> Void in
+                if let location = placemarks?[0].location {
+                    let regionRadius: CLLocationDistance = 1000
+                    let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                              regionRadius * 2.0, regionRadius * 2.0)
+                    self.mapView.setRegion(coordinateRegion, animated: false)
+                    
+                    let anotation = MKPointAnnotation()
+                    anotation.coordinate = (location.coordinate)
+                    
+                    self.mapView.addAnnotation(anotation)
+                }
+            }
+        }
+    }
     
     @IBAction func loadMap(sender: AnyObject) {
         let coder = CLGeocoder()

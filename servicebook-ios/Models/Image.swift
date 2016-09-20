@@ -14,7 +14,7 @@ class Image: Resource {
     var url: String?
     var user: User?
     
-    //transient fields
+    //transient fields used to cache image size
     var height:CGFloat?
     var scale:CGFloat?
     

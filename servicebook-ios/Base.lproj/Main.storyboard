@@ -6,39 +6,6 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Organizations-->
-        <scene sceneID="3eh-pm-0KC">
-            <objects>
-                <viewController id="Kuf-wV-DbD" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qgH-9U-ktB"/>
-                        <viewControllerLayoutGuide type="bottom" id="EO0-Vs-IfX"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="cpU-Io-YGB">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ueC-tq-8Yo">
-                                <rect key="frame" x="279" y="20" width="68" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vap-Rx-fmR">
-                                <rect key="frame" x="36" y="64" width="544" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Organizations" id="2zM-7f-qha"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JOx-78-fgn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1531" y="962"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -239,7 +206,6 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="6kf-Cc-sGN"/>
@@ -1036,7 +1002,6 @@
                         <outlet property="name" destination="VlZ-Wp-Iu6" id="pz6-e4-0wc"/>
                         <outlet property="time" destination="3Yh-7k-5BH" id="M6q-my-TGi"/>
                         <outlet property="writeSomething" destination="V27-dA-axg" id="2GI-vJ-N7O"/>
-                        <segue destination="bml-0w-dnT" kind="presentation" id="mDY-1T-juS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FKx-om-lXZ" userLabel="First Responder" sceneMemberID="firstResponder"/>

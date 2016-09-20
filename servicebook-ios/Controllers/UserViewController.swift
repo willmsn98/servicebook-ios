@@ -36,8 +36,6 @@ class UserViewController: UIViewController, LoginButtonDelegate {
         } else {
             showLogin()
         }
-        
-
     }
     
     func showLogin() {
@@ -57,8 +55,9 @@ class UserViewController: UIViewController, LoginButtonDelegate {
                 self.locationLabel.hidden = false
                 
                 if let facebookId = user.facebookId {
-                    pm.getImage(facebookId, height: 100).onSuccess(callback: { (image) in
-                        self.imageView.image = image
+                    pm.getFacebookImage(facebookId, height: 100).onSuccess(callback: { (image) in
+                        let circularImage = image.af_imageRoundedIntoCircle()
+                        self.imageView.image = circularImage
                         self.imageView.hidden = false
                     }).onFailure(callback: { (error) in
                         print(error)

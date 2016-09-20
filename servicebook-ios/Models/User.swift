@@ -38,6 +38,7 @@ class User: Resource {
             "facebookId": Attribute(),
             ]
         
+        //fields used for querying with Elide
         var emailAttribute = Attribute()
         emailAttribute = emailAttribute.readOnly()
         fields["user.email"] = emailAttribute
