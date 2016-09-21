@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1D2269DAFDB0A240A966E572 /* Pods_servicebook_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73E957400FC60B0C31C75245 /* Pods_servicebook_ios.framework */; };
+		420154FA1D923CD10038E84C /* ServiceTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420154F91D923CD10038E84C /* ServiceTabBarController.swift */; };
 		42256B0F1D4324F2001E17C0 /* EventCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42256B0E1D4324F2001E17C0 /* EventCommentTableViewCell.swift */; };
 		422B91671CCF941100329BF6 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B91661CCF941100329BF6 /* PersistenceManager.swift */; };
 		424B54771CD05D5900F98790 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B54761CD05D5900F98790 /* EventTableViewCell.swift */; };
@@ -54,6 +55,7 @@
 		1458192FD1CF8D52600A4EFB /* Pods-servicebook-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-servicebook-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-servicebook-ios/Pods-servicebook-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		1AAC2ABD7097FE47D82511A9 /* Pods-servicebook-iosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-servicebook-iosTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-servicebook-iosTests/Pods-servicebook-iosTests.release.xcconfig"; sourceTree = "<group>"; };
 		29E4BF8D3CAA14F3691056DA /* Pods_servicebook_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_servicebook_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		420154F91D923CD10038E84C /* ServiceTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceTabBarController.swift; path = Controllers/ServiceTabBarController.swift; sourceTree = "<group>"; };
 		42256B0E1D4324F2001E17C0 /* EventCommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventCommentTableViewCell.swift; path = Views/EventCommentTableViewCell.swift; sourceTree = "<group>"; };
 		422B91661CCF941100329BF6 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		424B54761CD05D5900F98790 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventTableViewCell.swift; path = Views/EventTableViewCell.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				42D3C4A81D30C63200CBF083 /* EventViewController.swift */,
 				428292DE1D7D2D9A00E8349F /* LoginViewController.swift */,
 				426841041D810E06004F8098 /* UserViewController.swift */,
+				420154F91D923CD10038E84C /* ServiceTabBarController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				42D3C4A91D30C63200CBF083 /* EventViewController.swift in Sources */,
 				42F086D91CCF2BD2002DD573 /* Event.swift in Sources */,
 				428292DF1D7D2D9A00E8349F /* LoginViewController.swift in Sources */,
+				420154FA1D923CD10038E84C /* ServiceTabBarController.swift in Sources */,
 				42FC1B221CC9E4950030F5BD /* ActivityViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

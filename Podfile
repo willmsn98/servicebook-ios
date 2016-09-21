@@ -14,6 +14,7 @@ pod 'FacebookCore'
 pod 'FacebookLogin'
 pod 'Flurry-iOS-SDK'
 pod 'SwiftOverlays'
+pod 'FontAwesome.swift'
 
 end
 
