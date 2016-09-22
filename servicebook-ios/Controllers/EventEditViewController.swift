@@ -30,10 +30,14 @@ class EventEditViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    let startTimeDatePicker: UIDatePicker = UIDatePicker()
+    let endTimeDatePicker: UIDatePicker = UIDatePicker()
+
     var activityVC: ActivityViewController!
     var eventVC: EventViewController!
     var event: Event!
     var edit = false
+    var updatedImage = false
     
     let dateFormatter = NSDateFormatter()
     
@@ -44,13 +48,37 @@ class EventEditViewController: UIViewController {
         
         dateFormatter.dateFormat = "EEEE, MMMM d, YYYY h:mm a"
 
-        let startTimeDatePicker: UIDatePicker = UIDatePicker()
-        startTimeDatePicker.addTarget(self, action:#selector(EventEditViewController.updateStartTime(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        startTimeDatePicker.minuteInterval = 5
         startTime.inputView = startTimeDatePicker
         
-        let endTimeDatePicker: UIDatePicker = UIDatePicker()
-        endTimeDatePicker.addTarget(self, action:#selector(EventEditViewController.updateEndTime(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        let startTimeToolBar = UIToolbar()
+        startTimeToolBar.barStyle = UIBarStyle.Default
+        startTimeToolBar.translucent = true
+        startTimeToolBar.sizeToFit()
+        
+        let startTimeDoneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EventEditViewController.updateStartTime(_:)))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EventEditViewController.donePicker(_:)))
+        
+        startTimeToolBar.setItems([cancelButton, spaceButton, startTimeDoneButton], animated: false)
+        startTimeToolBar.userInteractionEnabled = true
+        
+        startTime.inputAccessoryView = startTimeToolBar
+        
+        endTimeDatePicker.minuteInterval = 5
         endTime.inputView = endTimeDatePicker
+        
+        let endTimeToolBar = UIToolbar()
+        endTimeToolBar.barStyle = UIBarStyle.Default
+        endTimeToolBar.translucent = true
+        endTimeToolBar.sizeToFit()
+        
+        let endTimeDoneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EventEditViewController.updateEndTime(_:)))
+        
+        endTimeToolBar.setItems([endTimeDoneButton, spaceButton, endTimeDoneButton], animated: false)
+        endTimeToolBar.userInteractionEnabled = true
+        
+        endTime.inputAccessoryView = endTimeToolBar
         
         //editing
         if(event != nil) {
@@ -67,9 +95,11 @@ class EventEditViewController: UIViewController {
             address.text = event.address
             if let startTime = event.startTime {
                 self.startTime.text = dateFormatter.stringFromDate(startTime)
+                self.startTimeDatePicker.date = startTime
             }
             if let endTime = event.endTime {
                 self.endTime.text = dateFormatter.stringFromDate(endTime)
+                self.endTimeDatePicker.date = endTime
             }
             
             self.enableControls(true)
@@ -83,6 +113,7 @@ class EventEditViewController: UIViewController {
         }
 
     }
+
     
     @IBAction func saveEvent(sender: AnyObject) {
         
@@ -101,13 +132,16 @@ class EventEditViewController: UIViewController {
                 self.event.name = self.name.text
                 self.event.details = self.details.text
                 self.event.address = self.address.text
-                
+
+                self.event.startTime = self.roundDate(self.startTimeDatePicker.date, interval: 5)
+                self.event.endTime = self.roundDate(self.endTimeDatePicker.date, interval: 5)
+
                 if !self.edit {
                     self.event.owner = pm.user
                 }
                 
                 let image = self.imageView.image
-                if let image = image {
+                if self.updatedImage, let image = image {
                     self.enableControls(false)
                     self.showWaitOverlayWithText("Please wait...")
                     pm.uploadImage(image, onCompletion: { (status, image) in
@@ -165,6 +199,8 @@ class EventEditViewController: UIViewController {
                 asset.fetchImageWithSize(CGSize(width: (asset.originalAsset?.pixelWidth)!, height: (asset.originalAsset?.pixelHeight)!), completeBlock: { image, info in
                     self.imageView.image = image
                     if let imageSize  = image?.size {
+                        
+                        self.updatedImage = true
                         
                         //set height
                         self.imageViewHeight.constant = self.computeHeight(imageSize)
@@ -248,20 +284,46 @@ class EventEditViewController: UIViewController {
         activityVC.deleteSelectedEvent()
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
+
     func updateStartTime(sender: UIDatePicker) {
-        self.startTime.text = dateFormatter.stringFromDate(sender.date)
-        self.event.startTime = sender.date
+        
+        let date = roundDate(startTimeDatePicker.date, interval: 5)
+        self.startTime.text = dateFormatter.stringFromDate(date)
+        
+        //Add an hour and set to end time
+        let calendar = NSCalendar.currentCalendar()
+        if let endDate = calendar.dateByAddingUnit(
+            NSCalendarUnit.Hour,
+            value: 1,
+            toDate: date,
+            options: NSCalendarOptions(rawValue: 0)
+            ) {
+            self.endTimeDatePicker.date = endDate
+            self.endTime.text = dateFormatter.stringFromDate(endDate)
+        }
+        
+        startTime.resignFirstResponder()
     }
     
     func updateEndTime(sender: UIDatePicker) {
-        self.endTime.text = dateFormatter.stringFromDate(sender.date)
-        self.event.endTime = sender.date
+        let date = roundDate(endTimeDatePicker.date, interval: 5)
+        self.endTime.text = dateFormatter.stringFromDate(date)
+        endTime.resignFirstResponder()
+
     }
-    
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
-        self.view.endEditing(true)
+
+    func donePicker(sender: UIDatePicker) {
+        startTime.resignFirstResponder()
+        endTime.resignFirstResponder()
     }
-    
+
+    func roundDate(date: NSDate, interval:Int) -> NSDate{
+        let calendar = NSCalendar.currentCalendar()
+        var date = startTimeDatePicker.date
+        
+        let nextDiff = calendar.component(.Minute, fromDate: date) % interval
+        date = calendar.dateByAddingUnit(.Minute, value: nextDiff * -1, toDate: date, options: []) ?? NSDate()
+        
+        return date
+    }
 }
